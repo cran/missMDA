@@ -9,7 +9,9 @@ MIPCA <- function(X,ncp=2,scale=TRUE,method="Regularized",threshold=1e-4,nboot=1
   rec.pca <- as.matrix(X)
   rec.pca[missing] <- rec[missing]
   resid <- rec.pca-rec #residuals are centred
-  if (scale) resid <- sweep(resid,2,apply(rec,2,sd),FUN="/")  ###
+  sd_resid <- apply(impute.data,2,sd)
+##  sd_resid <- apply(rec,2,sd)
+  if (scale) resid <- sweep(resid,2,sd_resid,FUN="/")  ###
   sigma <- sqrt((sum((resid[-missing])^2))/ (nrow(X)*ncol(X)-(length(missing)+ncol(X)+ncp*(nrow(X)-1+ncol(X)-ncp))))
 
   rownames(rec.pca) <- rownames(X)
@@ -18,16 +20,19 @@ MIPCA <- function(X,ncp=2,scale=TRUE,method="Regularized",threshold=1e-4,nboot=1
 for(i in 1:nboot){
 ### Sampling variability
  resid.star <- matrix(rnorm(nrow(X)*ncol(X),0,sigma),ncol=ncol(X))
- if (scale) resid.star <- sweep(resid.star,2,apply(rec,2,sd),FUN="*") ###
+ if (scale) resid.star <- sweep(resid.star,2,sd_resid,FUN="*") ###
  Xstar <- rec+resid.star
 ## 2 rows to add some NA values
  missing2 <- sample(1:(nrow(X)*ncol(X)),length(missing))
+
+##missing2=missing
+
  Xstar[missing2] <- NA
  acpboot <- PCA(imputePCA(Xstar,scale=scale,ncp=ncp,method=method,threshold=threshold)$completeObs,scale=scale,ncp=ncp,graph=FALSE)
 
 ###Drawing from the predictive distribution
  residstar2 <- matrix(rnorm(nrow(X)*ncol(X),0,sigma),ncol=ncol(X))
- if (scale) residstar2 <- sweep(residstar2,2,apply(rec,2,sd),FUN="*")
+ if (scale) residstar2 <- sweep(residstar2,2,sd_resid,FUN="*")
  rec.pca[missing] <- (reconst(acpboot,ncp)+residstar2)[missing]
  res.MI[,,i] <- rec.pca
 }
