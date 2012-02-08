@@ -4,12 +4,15 @@
 \title{Impute missing values in categorical variables with Multiple Correspondence Analysis}
 \description{Impute the missing values of a categorical dataset (in the indicator matrix) with Multiple Correspondence Analysis}
 \usage{
-imputeMCA(don, ncp=2, threshold=1e-06, seed=NULL, maxiter=1000)
+imputeMCA(don, ncp=2, row.w=NULL, coeff.ridge=1, threshold=1e-06, seed=NULL, maxiter=1000)
 }
 
 \arguments{
   \item{don}{a data.frame with categorical variables containing missing values}
   \item{ncp}{integer corresponding to the number of dimensions used to reconstruct data with the reconstruction formulae}
+  \item{row.w}{an optional row weights (by default, a vector of 1 over the number of rows for uniform row weights)}
+  \item{coeff.ridge}{a positive coefficient that permits to shrink the eigenvalues more than by the mean of the last eigenvalues 
+  (by default, 1 the eigenvalues are shrunk by the mean of the last eigenvalues; a coefficient between 1 and 2 is required)}
   \item{threshold}{the threshold for assessing convergence}
   \item{seed}{an integer to specify the seed for the initialization for the regularized iterative MCA algorithm (if seed = NULL the initialization step corresponds to the imputation of the proportion of each category)}
   \item{maxiter}{integer, maximum number of iterations for the regularized iterative MCA algorithm}
@@ -22,7 +25,7 @@ If ncp=0, the Average method (imputation with the proportion) is performed.
 }
 
 \value{
-Return the imputed indicator matrix. The imputed valued are real numbers and may be seen as degree of membership to the corresponding category.
+Return the imputed indicator matrix (in the tab.disj object) and the completed data.frame (in the completeObs object). In the indicator matrix, the imputed values are real numbers and may be seen as degree of membership to the corresponding category.
 }
 
 \author{
@@ -40,11 +43,9 @@ data(vnf)
 ##   (for the reconstruction step)
 ## nb <- estim_ncpMCA(vnf,ncp.max=5) ## Time-consuming, nb = 4
 
-## Impute indicator matrix
-tab.disj <- imputeMCA(vnf, ncp=4)
-
-## A MCA can be performed
-res.mca <- MCA(vnf,tab.disj=tab.disj)
+## Impute indicator matrix and perform a MCA
+tab.disj.impute <- imputeMCA(vnf, ncp=4)$tab.disj
+res.mca <- MCA(vnf,tab.disj=tab.disj.impute)
 }
 }
 

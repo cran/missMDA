@@ -66,8 +66,8 @@ if (orthogonal) {
   res <- x
   if (!inherits(res, "MIPCA")) stop("non convenient data")
   ncp <- res$call$ncp
-  reference <- PCA(res$res.imputePCA,scale=res$call$scale,graph=FALSE,ncp=ncp)
-   rec.pca <- res$res.imputePCA
+  reference <- PCA(res$res.imputePCA,scale.unit=res$call$scale,graph=FALSE,ncp=ncp)
+  rec.pca <- res$res.imputePCA
 #  rec <- reconst(reference,ncp)
 #  rec.pca <- as.matrix(res$call$X)
 #  rec.pca[res$call$missing] <- rec[res$call$missing]
@@ -78,11 +78,9 @@ if (orthogonal) {
 
 for (i in 1:dim(res$res.MI)[3]){
  rec.pca <- res$res.MI[,,i]
- acpfin <- PCA(rec.pca, scale=res$call$scale,graph=FALSE,ncp=ncp)
+ acpfin <- PCA(rec.pca, scale.unit=res$call$scale,graph=FALSE,ncp=ncp)
 
- res.proc <- procrustes(acpfin$ind$coord[,1:ncp], reference$ind$coord[,1:ncp],orthogonal = TRUE, translate = TRUE, magnify = TRUE)
- magnify <- res.proc$magnify
- tourne <- scale(acpfin$ind$coord[,1:ncp], scale = FALSE) %*% res.proc$tmat *magnify
+ tourne <- procrustes(acpfin$ind$coord[,1:ncp], reference$ind$coord[,1:ncp],orthogonal = TRUE, translate = TRUE, magnify = TRUE)$rmat
 
  colnames(tourne) <- colnames(res.procrustes)
  colnames(rec.pca) <- colnames(res.supp)
@@ -96,7 +94,7 @@ for (i in 1:dim(res$res.MI)[3]){
 if (!is.null(main)) title <- main
 if ((choice=="all")|(choice=="ind.proc")){
   if (new.plot) dev.new()
-  oo=PCA(res.procrustes,ind.sup=c((nrow(res$call$X)+1):nrow(res.procrustes)),scale=FALSE,graph=FALSE)
+  oo=PCA(res.procrustes,ind.sup=c((nrow(res$call$X)+1):nrow(res.procrustes)),scale.unit=FALSE,graph=FALSE)
   oo$eig=reference$eig
 el=coord.ellipse(cbind.data.frame(as.factor(rep(rownames(res$call$X),res$call$nboot)),oo$ind.sup$coord[,axes]),level.conf=level.conf) 
   if (is.null(main)) title="Multiple imputation using Procrustes" 
@@ -104,9 +102,7 @@ el=coord.ellipse(cbind.data.frame(as.factor(rep(rownames(res$call$X),res$call$nb
 
 #  if (!is.null(add.tab)){
 #    vrai = PCA(add.tab,graph=FALSE,scale=res$call$scale)
-#    proc <- procrustes(vrai$ind$coord[,axes], reference$ind$coord[,axes],orthogonal = TRUE, translate = TRUE, magnify = TRUE)
-#    magnify <- proc$magnify
-#    tourne <- scale(vrai$ind$coord[,axes], scale = FALSE) %*% proc$tmat *magnify
+#    tourne <- procrustes(vrai$ind$coord[,axes], reference$ind$coord[,axes],orthogonal = TRUE, translate = TRUE, magnify = TRUE)$rmat
 #    points(tourne[,axes],cex=0.9,col=2)
 #  }
 }
@@ -114,7 +110,7 @@ el=coord.ellipse(cbind.data.frame(as.factor(rep(rownames(res$call$X),res$call$nb
 if ((choice=="all")|(choice=="dim")){
   if (new.plot) dev.new()
   colnames(res.dim)=paste("V",1:ncol(res.dim))
-  ooo=PCA(res.dim,quanti.sup=(ncol(res$call$X)+1):ncol(res.dim),scale=res$call$scale,graph=FALSE)
+  ooo=PCA(res.dim,quanti.sup=(ncol(res$call$X)+1):ncol(res.dim),scale.unit=res$call$scale,graph=FALSE)
   ooo$eig=reference$eig
   if (is.null(main)) title="Projection of the Principal Components"  
   plot(ooo,choi="var",axes=axes,title=title,label="none",new.plot=FALSE,invisible="var")
@@ -122,7 +118,7 @@ if ((choice=="all")|(choice=="dim")){
 
 if ((choice=="all")|(choice=="ind.supp")){
   if (new.plot) dev.new()
-  oo=PCA(res.supp,ind.sup=c((nrow(res$call$X)+1):nrow(res.supp)),scale=res$call$scale,graph=FALSE)
+  oo=PCA(res.supp,ind.sup=c((nrow(res$call$X)+1):nrow(res.supp)),scale.unit=res$call$scale,graph=FALSE)
   el=coord.ellipse(cbind.data.frame(as.factor(rep(rownames(res$call$X),res$call$nboot)),oo$ind.sup$coord[,1:2]),level.conf = level.conf) 
   if (is.null(main)) title="Supplementary projection"    
   plot(oo,axes=axes,col.ind.sup=rep(1:nrow(res$call$X),res$call$nboot),label="ind",ellipse=el,col.quali="black",
@@ -147,7 +143,7 @@ if ((choice=="all")|(choice=="var")){
 
   colnames(res.var)=paste("V",1:ncol(res.var))
   colnames(res.var)[1:ncol(res$call$X)]=colnames(res$call$X)
-  oo=PCA(res.var,quanti.sup=c((ncol(res$call$X)+1):ncol(res.var)),scale=res$call$scale,graph=FALSE)
+  oo=PCA(res.var,quanti.sup=c((ncol(res$call$X)+1):ncol(res.var)),scale.unit=res$call$scale,graph=FALSE)
   if (is.null(main)) title="Variable representation"    
   plot(oo, axes=axes, choix = "var", title=title,invisible = "quanti.sup", fill = color[1:ncol(res$call$X)],new.plot=FALSE)
   for (k in 1:res$call$nboot) points(oo$quanti.sup$coord[((k-1)*ncol(res$call$X)+1):(k*ncol(res$call$X)),axes[1]], oo$quanti.sup$coord[((k-1)*ncol(res$call$X)+1):(k*ncol(res$call$X)),axes[2]], col = color[1:ncol(res$call$X)], pch = 15, cex = 0.3)
