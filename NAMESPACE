@@ -1,0 +1,1 @@
+export(estim_ncpPCA,estim_ncpMCA,imputeAFDM,imputeMCA,imputeMFA,imputePCA,MIPCA,plot.MIPCA)
