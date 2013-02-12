@@ -5,7 +5,7 @@
 Questionnaire done by 1232 individuals who answered 14 questions
 }
 \description{
-A user satisfaction survey of pleasure craft operators on the ``Canal des Deux Mers'', located in South of France, was carried out by the public corporation ``Voies Navigables de France'' responsible for managing and developing the largest network of navigable waterways in Europe
+A user satisfaction survey of pleasure craft operators on the ``Canal des Deux Mers'', located in South of France, was carried out by the public corporation ``Voies Navigables de France'' responsible for managing and developing the largest network of navigable waterways in Europe. Some values are missing.
 }
 \usage{data(vnf)}
 

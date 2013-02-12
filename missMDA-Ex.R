@@ -47,7 +47,7 @@ flush(stderr()); flush(stdout())
 
 ## Not run: 
 ##D data(vnf)
-##D result <- estim_ncpMCA(vnf,ncp.min=0, ncp.max=3, nbsim=100)
+##D result <- estim_ncpMCA(vnf,ncp.min=0, ncp.max=3)
 ## End(Not run)
 
 
@@ -68,8 +68,27 @@ flush(stderr()); flush(stdout())
 
 ## Not run: 
 ##D data(orange)
-##D nb <- estim_ncpPCA(orange,ncp.min=0,ncp.max=4) ## Time consuming, nb = 2
+##D nb <- estim_ncpPCA(orange,ncp.min=0,ncp.max=4) 
 ## End(Not run)
+
+
+
+cleanEx()
+nameEx("imputeFAMD")
+### * imputeFAMD
+
+flush(stderr()); flush(stdout())
+
+### Name: imputeFAMD
+### Title: Impute dataset with mixed data
+### Aliases: imputeFAMD
+### Keywords: models multivariate
+
+### ** Examples
+
+data(ozone)
+res.comp <- imputeFAMD(ozone, ncp=3)
+res.afdm <- AFDM(ozone,tab.comp=res.comp)
 
 
 
@@ -87,16 +106,14 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-## Not run: 
-##D data(vnf)
-##D ## First the number of components has to be chosen 
-##D ##   (for the reconstruction step)
-##D ## nb <- estim_ncpMCA(vnf,ncp.max=5) ## Time-consuming, nb = 4
-##D 
-##D ## Impute indicator matrix and perform a MCA
-##D tab.disj.impute <- imputeMCA(vnf, ncp=4)$tab.disj
-##D res.mca <- MCA(vnf,tab.disj=tab.disj.impute)
-## End(Not run)
+data(vnf)
+## First the number of components has to be chosen 
+##   (for the reconstruction step)
+## nb <- estim_ncpMCA(vnf,ncp.max=5) ## Time-consuming, nb = 4
+
+## Impute indicator matrix and perform a MCA
+tab.disj.impute <- imputeMCA(vnf, ncp=4)
+res.mca <- MCA(vnf,tab.disj=tab.disj.impute$tab.disj)
 
 
 
@@ -173,6 +190,26 @@ data(orange)
 ##D resMI <- MIPCA(orange,ncp=nb$ncp)
 ##D plot(resMI)
 ## End(Not run)
+
+
+
+cleanEx()
+nameEx("ozone")
+### * ozone
+
+flush(stderr()); flush(stdout())
+
+### Name: ozone
+### Title: Daily measurements of meteorological variables and ozone
+###   concentration
+### Aliases: ozone
+### Keywords: datasets
+
+### ** Examples
+
+data(ozone)
+res.comp <- imputeFAMD(ozone, ncp=3)
+res.afdm <- AFDM(ozone,tab.comp=res.comp)
 
 
 

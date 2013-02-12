@@ -45,7 +45,8 @@ find.category <- function (X,tabdisj){
 
 ########## Debut programme principal
 if (is.null(row.w)) row.w=rep(1/nrow(don),nrow(don))
-if (ncp==0) return(tab.disjonctif.prop(don,NULL,row.w=row.w))
+if (ncp==0) return(list(tab.disj=tab.disjonctif.prop(don,NULL,row.w=row.w),completeObs = find.category(don,tab.disjonctif.prop(don,NULL,row.w=row.w))))
+
 
 tab.disj.NA = tab.disjonctif.NA(don)
 hidden = which(is.na(tab.disj.NA))

@@ -1,6 +1,6 @@
-imputeMFA <- function (X, group, ncp = 2, type=rep("s",length(group)), method="Regularized",row.w=NULL,coeff.ridge=1,threshold = 1e-6,seed = NULL,nb.init=1,maxiter=1000,...){
+imputeMFA <- function (X, group, ncp = 2, type=rep("s",length(group)), method="Regularized",row.w=NULL,coeff.ridge=1,threshold = 1e-6,seed = NULL,maxiter=1000,...){
 
-impute <- function (X, group, ncp = 2, type=rep("s",length(group)), method=NULL,threshold = 1e-6,seed = NULL,init=1,maxiter=1000,row.w=NULL,coeff.ridge=1,...){
+impute <- function (X, group, ncp = 2, type=rep("s",length(group)), method=NULL,threshold = 1e-6,seed = NULL,maxiter=1000,row.w=NULL,coeff.ridge=1,...){
     moy.p <- function(V, poids) {
         res <- sum(V * poids,na.rm=TRUE)/sum(poids[!is.na(V)])
     }
@@ -43,7 +43,7 @@ find.category <- function (X,tabdisj){
   Xres <- X
   for (i in 1:ncol(X)){
     if (i %in% is.quali) Xres[,i] <- as.factor(levels(X[,i])[apply(tabdisj[,(vec[i]+1):vec[i+1]],1,which.max)])
-	else Xres[,i] <- tabdisj[,i]
+	else Xres[,i] <- tabdisj[,vec[i]+1]
   }
   return(Xres)
 }
@@ -83,20 +83,20 @@ find.category <- function (X,tabdisj){
           if (any(is.na(aux.base))) aux.base[missing] <- 0
           ponderation[g] <- svd.triplet(aux.base,ncp=1,row.w=row.w)$vs[1]
 		  Xhat <- cbind.data.frame(Xhat, aux.base/ponderation[g])
-          if (init>1) Xhat[missing] <- rnorm(length(missing)) ## random initialization
+          if (!is.null(seed)&(length(missing)!=0)) Xhat[missing,] <- rnorm(length(missing)) ## random initialization
         }
         if (type[g] == "c") {
           Xhat2 <- cbind.data.frame(Xhat2, aux.base)
 		  MM[[g]] <- apply(as.data.frame(aux.base), 2, moy.p,row.w)
           aux.base <- as.matrix(sweep(as.data.frame(aux.base), 2, MM[[g]], FUN = "-"))
           missing <- which(is.na(as.matrix(aux.base)))
-          if (any(is.na(aux.base))) aux.base[missing] <- 0          
-          ponderation[g] = svd.triplet(aux.base,ncp=1,row.w=row.w)$vs[1]		  
+          if (any(is.na(aux.base))) aux.base[missing] <- 0       
+          ponderation[g] = svd.triplet(aux.base,ncp=1,row.w=row.w)$vs[1]		 
 		  Xhat <- cbind.data.frame(Xhat, aux.base/ponderation[g])
-          if (init>1) Xhat[missing] <- rnorm(length(missing)) ## random initialization
+          if (!is.null(seed)&(length(missing)!=0)) Xhat[missing,] <- rnorm(length(missing)) ## random initialization   
         }
         if (type[g] == "n") {
-		   tab.disj = tab.disjonctif.prop(aux.base,row.w=row.w)
+		   tab.disj = tab.disjonctif.prop(aux.base,seed,row.w=row.w)
 		   tab.disj.comp[[g]] = tab.disj
 		   group.mod[g] <- ncol(tab.disj)
            MM[[g]] = apply(tab.disj, 2, moy.p,row.w)/ncol(aux.base)
@@ -201,6 +201,8 @@ find.category <- function (X,tabdisj){
    result <- list()
    result$tab.disj <- completeObs
    result$completeObs <- find.category(X,completeObs)
+   result$call$group.mod = group.mod
+   result$call$ind.var = ind.var
    return(result) 
 }
 
@@ -209,9 +211,9 @@ find.category <- function (X,tabdisj){
  method <- tolower(method)
  if (is.null(row.w)) row.w = rep(1,nrow(X))/nrow(X)
 # for (i in 1:nb.init){
-i=1
+# i=1
   if (!any(is.na(X))) stop("no missing values in X, this function is not useful. Perform MFA on X.")
-  res.impute <- impute(X, group=group,ncp=ncp, type=type, method=method, threshold = threshold,seed=seed,init=i,maxiter=maxiter,row.w=row.w,coeff.ridge=coeff.ridge)
+  res.impute <- impute(X, group=group,ncp=ncp, type=type, method=method, threshold = threshold,seed=seed,maxiter=maxiter,row.w=row.w,coeff.ridge=coeff.ridge)
 return(res.impute)
 #  if (mean((res.impute$recon[!is.na(X)]-X[!is.na(X)])^2) < obj){
 #    res <- res.impute

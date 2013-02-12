@@ -11,7 +11,7 @@ impute <- function (X, ncp = 4, scale=TRUE, method=NULL,threshold = 1e-6,seed = 
    nb.iter <- 1
    old <- Inf
    objective <- 0
-   if (!is.null(seed)) set.seed(seed)
+   if (!is.null(seed)){set.seed(seed)}
    X <- as.matrix(X)
    ncp <- min(ncp,ncol(X),nrow(X)-1)
    missing <- which(is.na(X))
@@ -23,7 +23,7 @@ impute <- function (X, ncp = 4, scale=TRUE, method=NULL,threshold = 1e-6,seed = 
    if (init>1) Xhat[missing] <- rnorm(length(missing)) ## random initialization
    recon <- Xhat
    if (ncp==0) nb.iter=0
-   
+ 
    while (nb.iter > 0) {
        Xhat[missing] <- recon[missing]
        if (scale) Xhat=sweep(Xhat,2,et, FUN="*")
@@ -65,7 +65,6 @@ impute <- function (X, ncp = 4, scale=TRUE, method=NULL,threshold = 1e-6,seed = 
 
    result <- list()
    result$completeObs <- completeObs
-   result$objective <- objective
    result$recon <- recon
    return(result) 
 }
@@ -77,7 +76,7 @@ impute <- function (X, ncp = 4, scale=TRUE, method=NULL,threshold = 1e-6,seed = 
  if (is.null(row.w)) row.w = rep(1,nrow(X))/nrow(X)
  for (i in 1:nb.init){
   if (!any(is.na(X))) return(X)
-  res.impute=impute(X, ncp=ncp, scale=scale, method=method, threshold = threshold,seed=seed,init=i,maxiter=maxiter,row.w=row.w,coeff.ridge=coeff.ridge)
+  res.impute=impute(X, ncp=ncp, scale=scale, method=method, threshold = threshold,seed=if(!is.null(seed)){(seed*(i-1))}else{i},init=i,maxiter=maxiter,row.w=row.w,coeff.ridge=coeff.ridge)
   if (mean((res.impute$recon[!is.na(X)]-X[!is.na(X)])^2) < obj){
     res <- res.impute
     obj <- mean((res.impute$recon[!is.na(X)]-X[!is.na(X)])^2)
