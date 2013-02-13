@@ -25,7 +25,8 @@ If ncp=0, the Average method (imputation with the proportion) is performed.
 }
 
 \value{
-Return the imputed indicator matrix (in the tab.disj object) and the completed data.frame (in the completeObs object). In the indicator matrix, the imputed values are real numbers and may be seen as degree of membership to the corresponding category.
+\item{tab.disj}{The imputed indicator matrix; the imputed values are real numbers and may be seen as degree of membership to the corresponding category.}
+\item{completeObs}{The completed data.frame}
 }
 
 \author{
@@ -34,19 +35,17 @@ Francois Husson  \email{husson@agrocampus-ouest.fr} and Julie Josse  \email{Juli
 
 \references{Josse, J., Chavent, M., Liquet, B. and Husson, F. (2010). Handling missing values with Regularized Iterative Multiple Correspondence Analysis.}
 
-\seealso{\code{\link{estim_ncpMCA}}}
+\seealso{\code{\link{estim_ncpMCA}},\code{\link{imputePCA}}}
 
 \examples{
-\dontrun{
 data(vnf)
 ## First the number of components has to be chosen 
 ##   (for the reconstruction step)
 ## nb <- estim_ncpMCA(vnf,ncp.max=5) ## Time-consuming, nb = 4
 
 ## Impute indicator matrix and perform a MCA
-tab.disj.impute <- imputeMCA(vnf, ncp=4)$tab.disj
-res.mca <- MCA(vnf,tab.disj=tab.disj.impute)
-}
+tab.disj.impute <- imputeMCA(vnf, ncp=4)
+res.mca <- MCA(vnf,tab.disj=tab.disj.impute$tab.disj)
 }
 
 \keyword{models}

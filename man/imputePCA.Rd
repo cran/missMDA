@@ -26,7 +26,6 @@ Impute the missing entries of a data frame using the iterative PCA algorithm (EM
 }
 \value{
   \item{completeObs}{the imputed dataset; the observed values for non-missing entries and the imputed values for missing values}
-  \item{objective}{the criterion, the mean square error between the reconstructed data and the observed data}
   \item{recon}{the reconstructed data}
 }
 

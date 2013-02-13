@@ -22,6 +22,7 @@ The multiple imputation is proper in the sense of Little and Rubin (2002) since 
 \value{
 \item{res.imputePCA}{A matrix corresponding to the imputed dataset obtained with the function imputePCA (the completed dataset)}
 \item{res.MI }{An array corresponding to nboot imputed dataset. The dimensions of the array are: the number of row of X, the number of column of X and nboot}
+\item{call}{the matched call}
 }
 
 \references{Josse, J., Husson, F. (2010). Multiple Imputation in PCA.}

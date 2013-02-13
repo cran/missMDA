@@ -36,7 +36,7 @@ Four graphs can be drawn:
 \author{Francois Husson  \email{husson@agrocampus-ouest.fr} and Julie Josse  \email{Julie.Josse@agrocampus-ouest.fr}
 }
 
-\seealso{\code{\link{MIPCA}}}
+\seealso{\code{\link{MIPCA}},\code{\link{imputePCA}}}
 \examples{
 data(orange)
 ## nb <- estim_ncpPCA(orange,ncp.max=5) ## Time consuming, nb = 2

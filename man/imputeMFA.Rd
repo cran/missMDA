@@ -4,8 +4,7 @@
 \description{Impute the missing values of a dataset with the Multiple Factor Analysis model. Can be used as a preliminary step before performing a MFA on an incomplete dataset with coninuous variables.}
 
 \usage{imputeMFA(X, group, ncp = 2, type=rep("s",length(group)), method = "Regularized", 
-       row.w = NULL,coeff.ridge=1,threshold = 1e-06, seed = NULL, nb.init = 1,  
-	   maxiter = 1000,...)
+       row.w = NULL,coeff.ridge=1,threshold = 1e-06, seed = NULL, maxiter = 1000,...)
 	   }
 
 \arguments{
@@ -21,7 +20,6 @@
   (by default, 1 the eigenvalues are shrunk by the mean of the last eigenvalues; a coefficient between 1 and 2 is required)}
   \item{threshold}{the threshold for assessing convergence}
   \item{seed}{a single value, interpreted as an integer for the set.seed function (if seed = NULL, missing values are initially imputed by the mean of each variable)}
-  \item{nb.init}{integer corresponding to the number of random initializations; the first initialization is the mean of each variable}
   \item{maxiter}{integer, maximum number of iteration for the algorithm}
   \item{\dots}{further arguments passed to or from other methods}
 }
@@ -33,11 +31,11 @@ The output can be used as an input in the MFA function using the argument tab.co
 }
 \value{
   \item{completeObs}{the imputed dataset; the observed values for non-missing entries and the imputed values for missing values}
-  \item{objective}{the criterion, the mean square error between the reconstructed data and the observed data}
-  \item{recon}{the reconstructed data}
+  \item{tab.disj}{the imputed matrix in which categorical variables are coding by dummy variables. In the dummy variables, the imputed values are real numbers and may be seen as degree of membership to the corresponding category.}
+  \item{call}{the matched call}
 }
 
-\references{PhD thesis of J. Josse or HDR of F. Husson}
+\references{F. Husson, J. Josse (2013) Handling missing values in multiple factor analysis. \cr PhD thesis of J. Josse or HDR of F. Husson}
 
 \author{Francois Husson  \email{husson@agrocampus-ouest.fr} and Julie Josse  \email{Julie.Josse@agrocampus-ouest.fr}
 }

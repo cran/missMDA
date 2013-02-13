@@ -1,4 +1,4 @@
-estim_ncpPCA <- function(X,ncp.min=0,ncp.max=5,method="Regularized",scale=TRUE,method.cv="loo",nbsim=100,pNA=0.05,threshold=1e-4){
+estim_ncpPCA <- function(X,ncp.min=0,ncp.max=5,method="Regularized",scale=TRUE,method.cv="gcv",nbsim=100,pNA=0.05,threshold=1e-4){
 
 ## method = "em" or "Regularized"
 ## method.cv = "loo" (for leave-one-out) or "Kfold" (a percentage of pNA missing values is added and nbsim are done)
@@ -10,6 +10,25 @@ for (j in 1:ncol(X)) if (!is.numeric(X[,j])) auxi = c(auxi,colnames(X)[j])
 if (!is.null(auxi)) stop(paste("\nThe following variables are not quantitative: ", auxi))
 ncp.max <- min(ncp.max,ncol(X)-1,nrow(X)-2)
 res <- NULL
+
+if (method.cv=="gcv") {
+p=ncol(X)
+n=nrow(X)
+if (is.null(ncp.max)) ncp.max <- ncol(X)-2
+ncp.max <- min(nrow(X)-3,ncol(X)-2,ncp.max)
+crit <- NULL
+    if (ncp.min == 0) crit = mean((X - rep(colMeans(X, na.rm = TRUE), each = nrow(X)))^2, na.rm = TRUE)
+    for (q in max(ncp.min, 1):ncp.max) {
+#        res.pca = PCA(imputePCA(X,scale=scale,ncp=q,method=method,maxiter=1000)$completeObs, scale = scale, graph = FALSE, ncp = max(q, 2))
+#        rec = reconst(res.pca, ncp = q)
+        rec = imputePCA(X,scale=scale,ncp=q,method=method,maxiter=1000)$recon
+        crit = c(crit, mean(((n * p - sum(is.na(X))) * (X - rec)/((n-1) * p - sum(is.na(X)) - q * (n + p - q-1)))^2, na.rm = T))
+		}
+  if (any(diff(crit)>0)) { ncp = which(diff(crit)>0)[1]
+  } else ncp <- which.min(crit)
+ names(crit) <- c(ncp.min:ncp.max)
+  return(list(ncp = as.integer(ncp+ncp.min-1),criterion=crit))
+}
 
 if (method.cv=="loo"){
  for (nbaxes in ncp.min:ncp.max){
@@ -27,9 +46,8 @@ if (method.cv=="loo"){
   res <- c(res,mean((Xhat-X)^2,na.rm=TRUE))
  }
  names(res) <- c(ncp.min:ncp.max)
- result = list(ncp = which.min(res)+ncp.min-1,criterion=res)
+ result = list(ncp = as.integer(which.min(res)+ncp.min-1),criterion=res)
 }
-
 
 if (method.cv=="kfold"){
   res <- matrix(NA,ncp.max-ncp.min+1,nbsim)
@@ -45,7 +63,8 @@ if (method.cv=="kfold"){
   }
  }
  resu <- apply(res,1,mean)
- result <- list(ncp = which.min(resu)+ncp.min-1,criterion=resu)
+ names(resu) <- c(ncp.min:ncp.max)
+result <- list(ncp = as.integer(which.min(resu)+ncp.min-1),criterion=resu)
 }
 return(result)
 }
