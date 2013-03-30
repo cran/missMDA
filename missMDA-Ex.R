@@ -47,7 +47,7 @@ flush(stderr()); flush(stdout())
 
 ## Not run: 
 ##D data(vnf)
-##D result <- estim_ncpMCA(vnf,ncp.min=0, ncp.max=3)
+##D result <- estim_ncpMCA(vnf,ncp.min=0, ncp.max=5)
 ## End(Not run)
 
 
@@ -80,15 +80,15 @@ nameEx("imputeFAMD")
 flush(stderr()); flush(stdout())
 
 ### Name: imputeFAMD
-### Title: Impute dataset with mixed data
+### Title: Impute mixed dataset
 ### Aliases: imputeFAMD
 ### Keywords: models multivariate
 
 ### ** Examples
 
 data(ozone)
-res.comp <- imputeFAMD(ozone, ncp=3)
-res.afdm <- AFDM(ozone,tab.comp=res.comp)
+res.impute <- imputeFAMD(ozone, ncp=3) #
+res.afdm <- FAMD(ozone,tab.comp=res.impute) # the output can be used as an input of the FAMD function of the FactoMineR package to perform the FAMD on the incomplete data ozone 
 
 
 
@@ -99,8 +99,7 @@ nameEx("imputeMCA")
 flush(stderr()); flush(stdout())
 
 ### Name: imputeMCA
-### Title: Impute missing values in categorical variables with Multiple
-###   Correspondence Analysis
+### Title: Impute categorical dataset
 ### Aliases: imputeMCA
 ### Keywords: models multivariate
 
@@ -111,9 +110,9 @@ data(vnf)
 ##   (for the reconstruction step)
 ## nb <- estim_ncpMCA(vnf,ncp.max=5) ## Time-consuming, nb = 4
 
-## Impute indicator matrix and perform a MCA
-tab.disj.impute <- imputeMCA(vnf, ncp=4)
-res.mca <- MCA(vnf,tab.disj=tab.disj.impute$tab.disj)
+## Impute the indicator matrix and perform a MCA
+res.impute <- imputeMCA(vnf, ncp=4)
+res.mca <- MCA(vnf,tab.disj=res.impute$tab.disj) # the imputed indicator matrix can be used as an input of the MCA function of the FactoMineR package to perform the MCA on the incomplete data ozone 
 
 
 
@@ -124,21 +123,23 @@ nameEx("imputeMFA")
 flush(stderr()); flush(stdout())
 
 ### Name: imputeMFA
-### Title: Impute dataset with MFA
+### Title: Impute dataset with variables structured into groups of
+###   variables (groups of continuous or categorical variables)
 ### Aliases: imputeMFA
 ### Keywords: models multivariate
 
 ### ** Examples
 
 data(orange)
-res.comp <- imputeMFA(orange,group=c(5,3),type=rep("s",2),ncp=2)
-## Note that MFA is performed on the completed matrix
-res.mfa <- MFA(res.comp$completeObs,group=c(5,3),type=rep("s",2))
+## Impute the data and perform a MFA
+res.impute <- imputeMFA(orange,group=c(5,3),type=rep("s",2),ncp=2) # groups of continuous variables only
+res.mfa <- MFA(res.impute$completeObs,group=c(5,3),type=rep("s",2)) # the imputed data can be used as an input of the MFA function of the FactoMineR package to perform the MFA on the incomplete data 
 
 ## Not run: 
 ##D data(vnf)
+##D ## Impute the indicator matrix and perform a MFA # groups of categorical variables only
 ##D res.comp <- imputeMFA(vnf,group=c(6,5,3),type=c("n","n","n"),ncp=2)
-##D res.mfa <- MFA(vnf,group=c(6,5,3),type=c("n","n","n"),tab.comp=res.comp)
+##D res.mfa <- MFA(vnf,group=c(6,5,3),type=c("n","n","n"),tab.comp=res.comp) # the output can be used as an input of the MFA function of the FactoMineR package to perform the MFA on the incomplete data 
 ## End(Not run)
 
 
@@ -158,13 +159,13 @@ flush(stderr()); flush(stdout())
 
 data(orange)
 ## First the number of components has to be chosen 
-##   (for the reconstruction step)
+##   (for the imputation step)
 ## nb <- estim_ncpPCA(orange,ncp.max=5) ## Time consuming, nb = 2
 
 ## Imputation
 res.comp <- imputePCA(orange,ncp=2)
 
-## A PCA can be performed
+## A PCA can be performed on the imputed data 
 res.pca <- PCA(res.comp$completeObs)
 
 
@@ -209,7 +210,7 @@ flush(stderr()); flush(stdout())
 
 data(ozone)
 res.comp <- imputeFAMD(ozone, ncp=3)
-res.afdm <- AFDM(ozone,tab.comp=res.comp)
+res.afdm <- FAMD(ozone,tab.comp=res.comp)
 
 
 

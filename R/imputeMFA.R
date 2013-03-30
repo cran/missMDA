@@ -1,4 +1,4 @@
-imputeMFA <- function (X, group, ncp = 2, type=rep("s",length(group)), method="Regularized",row.w=NULL,coeff.ridge=1,threshold = 1e-6,seed = NULL,maxiter=1000,...){
+imputeMFA <- function (X, group, ncp = 2, type=rep("s",length(group)), method=c("Regularized","EM"),row.w=NULL,coeff.ridge=1,threshold = 1e-6,seed = NULL,maxiter=1000,...){
 
 impute <- function (X, group, ncp = 2, type=rep("s",length(group)), method=NULL,threshold = 1e-6,seed = NULL,maxiter=1000,row.w=NULL,coeff.ridge=1,...){
     moy.p <- function(V, poids) {
@@ -49,6 +49,8 @@ find.category <- function (X,tabdisj){
 }
 
 ############# main program
+   method <- match.arg(method,c("Regularized","regularized","EM","em"),several.ok=T)[1]
+   method <- tolower(method)
    if (!is.null(seed)) set.seed(seed)
    if ("n"%in%type){
       niveau = NULL
@@ -113,7 +115,7 @@ find.category <- function (X,tabdisj){
    for (g in 2:length(group)) ind.var[[g]] <- (cumsum(group.mod)[g-1]+1):cumsum(group.mod)[g]
    recon <- Xhat <- as.matrix(Xhat)
    if (ncp>=min(nrow(Xhat)-2,ncol(Xhat)-1)) stop("ncp is too large")
-   ncp <- min(ncp,ncol(X),nrow(X)-1)
+   ncp <- min(ncp,ncol(X)-1,nrow(X)-2)
    missing <- which(is.na(as.matrix(Xhat2)))
    nb.iter <- 1
    old <- Inf

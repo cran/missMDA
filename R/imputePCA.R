@@ -1,4 +1,4 @@
-imputePCA <- function (X, ncp = 2, scale=TRUE, method="Regularized",row.w=NULL,coeff.ridge=1,threshold = 1e-6,seed = NULL,nb.init=1,maxiter=1000,...){
+imputePCA <- function (X, ncp = 2, scale=TRUE, method=c("Regularized","EM"),row.w=NULL,coeff.ridge=1,threshold = 1e-6,seed = NULL,nb.init=1,maxiter=1000,...){
 
 impute <- function (X, ncp = 4, scale=TRUE, method=NULL,threshold = 1e-6,seed = NULL,init=1,maxiter=1000,row.w=NULL,coeff.ridge=1,...){
     moy.p <- function(V, poids) {
@@ -70,9 +70,10 @@ impute <- function (X, ncp = 4, scale=TRUE, method=NULL,threshold = 1e-6,seed = 
 }
 
 #### Main program
+ method <- match.arg(method,c("Regularized","regularized","EM","em"),several.ok=T)[1]
  obj=Inf
  method <- tolower(method)
- if (ncp>=min(nrow(X)-2,ncol(X)-1)) stop("ncp is too large")
+ if (ncp>min(nrow(X)-2,ncol(X)-1)) stop("ncp is too large")
  if (is.null(row.w)) row.w = rep(1,nrow(X))/nrow(X)
  for (i in 1:nb.init){
   if (!any(is.na(X))) return(X)

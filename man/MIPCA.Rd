@@ -4,7 +4,7 @@
 \description{
 MIPCA performs Multiple Imputation with a PCA model. Can be used as a preliminary step to perform Multiple Imputation in PCA}
 \usage{
-MIPCA(X, ncp = 2, scale = TRUE, method = "Regularized", 
+MIPCA(X, ncp = 2, scale = TRUE, method=c("Regularized","EM"), 
    threshold = 1e-04, nboot = 100)
 }
 \arguments{

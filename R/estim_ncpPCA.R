@@ -1,7 +1,9 @@
-estim_ncpPCA <- function(X,ncp.min=0,ncp.max=5,method="Regularized",scale=TRUE,method.cv="gcv",nbsim=100,pNA=0.05,threshold=1e-4){
+estim_ncpPCA <- function(X,ncp.min=0,ncp.max=5,method=c("Regularized","EM"),scale=TRUE,method.cv=c("gcv","loo","Kfold"),nbsim=100,pNA=0.05,threshold=1e-4){
 
 ## method = "em" or "Regularized"
 ## method.cv = "loo" (for leave-one-out) or "Kfold" (a percentage of pNA missing values is added and nbsim are done)
+method <- match.arg(method,c("Regularized","EM","em","regularized"),several.ok=T)[1]
+method.cv <- match.arg(method.cv,c("gcv","loo","Kfold","GCV","kfold","LOO"),several.ok=T)[1]
 
 method <- tolower(method)
 method.cv <- tolower(method.cv)
@@ -14,8 +16,8 @@ res <- NULL
 if (method.cv=="gcv") {
 p=ncol(X)
 n=nrow(X)
-if (is.null(ncp.max)) ncp.max <- ncol(X)-2
-ncp.max <- min(nrow(X)-3,ncol(X)-2,ncp.max)
+if (is.null(ncp.max)) ncp.max <- ncol(X)-1
+ncp.max <- min(nrow(X)-2,ncol(X)-1,ncp.max)
 crit <- NULL
     if (ncp.min == 0) crit = mean((X - rep(colMeans(X, na.rm = TRUE), each = nrow(X)))^2, na.rm = TRUE)
     for (q in max(ncp.min, 1):ncp.max) {
@@ -27,7 +29,7 @@ crit <- NULL
   if (any(diff(crit)>0)) { ncp = which(diff(crit)>0)[1]
   } else ncp <- which.min(crit)
  names(crit) <- c(ncp.min:ncp.max)
-  return(list(ncp = as.integer(ncp+ncp.min-1),criterion=crit))
+ return(list(ncp = as.integer(ncp+ncp.min-1),criterion=crit))
 }
 
 if (method.cv=="loo"){

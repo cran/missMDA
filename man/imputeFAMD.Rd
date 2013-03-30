@@ -1,44 +1,49 @@
 \name{imputeFAMD}
 \alias{imputeFAMD}
-\title{Impute dataset with mixed data}
-\description{Impute the missing values of a dataset with the quantitative and categorical variables using the principal component method AFDM. 
-Can be used as a preliminary step before performing a AFDM on an incomplete dataset.}
+\title{Impute mixed dataset}
+\description{Impute the missing values of a mixed dataset (with continuous and categorical variables) using the principal component method "factorial analysis for mixed data" (FAMD). Can be used as a preliminary step before performing FAMD on an incomplete dataset.}
 
-\usage{imputeFAMD(X, ncp = 2, method = "Regularized", row.w = NULL,
+\usage{imputeFAMD(X, ncp = 2, method=c("Regularized","EM"), row.w = NULL,
       coeff.ridge=1,threshold = 1e-06, seed = NULL, maxiter = 1000,...)
 	   }
 
 \arguments{
   \item{X}{a data.frame with continuous and categorical variables containing missing values}
-  \item{ncp}{integer corresponding to the number of components used to reconstruct data with the PCA reconstruction formulae}
+  \item{ncp}{integer corresponding to the number of components used to predict the missing entries}
   \item{method}{"Regularized" by default or "EM"}
-  \item{row.w}{an optional row weights (by default, a vector of 1 over the number of rows for uniform row weights)}
-  \item{coeff.ridge}{a positive coefficient that permits to shrink the eigenvalues more than by the mean of the last eigenvalues 
-  (by default, 1 the eigenvalues are shrunk by the mean of the last eigenvalues; a coefficient between 1 and 2 is required)}
+  \item{row.w}{row weights (by default, uniform row weights)}
+  \item{coeff.ridge}{1 by default to perform the regularized imputeFAMD algorithm; useful only if method="Regularized". Other regularization terms can be implemented by setting the value to less than 1 in order to regularized less (to get closer to the results of the EM method) or more than 1 to regularized more}
   \item{threshold}{the threshold for assessing convergence}
-  \item{seed}{a single value, interpreted as an integer for the set.seed function (if seed = NULL, missing values are initially imputed by the mean of each variable)}
+  \item{seed}{integer, by default seed = NULL implies that missing values are initially imputed by the mean of each variable for the continuous variables and by the proportion of the category for the categorical variables coded with indicator matrices of dummy variables. Other values leads to a random initialization}
   \item{maxiter}{integer, maximum number of iteration for the algorithm}
   \item{\dots}{further arguments passed to or from other methods}
 }
 \details{
-Impute the missing entries of a data frame using the iterative FAMD algorithm (EM) or a regularised iterative FAMD algorithm. The iterative FAMD algorithm first imputes the missing values with initial values: the mean of the variable for the continuous variables and the proportion of the category for each category using the non-missing entries. Then performs FAMD on the completed dataset, imputes the missing values with the reconstruction formulae of order ncp and iterates until convergence. The regularized version allows to avoid overfitting problems, especially important when there are many missing values. The output can be used as an input in the AFDM function.
+Impute the missing entries of a mixed data using the iterative FAMD algorithm (method="EM") or the regularised iterative FAMD algorithm (method="Regularized"). The (regularized) iterative FAMD algorithm first consists in coding the categorical variables using the indicator matrix
+of dummy variables. Then, in the initialization step, missing values are imputed with initial values such as the mean of the variable for the continuous variables and the proportion of the category for each category using the non-missing entries. If the argument seed is set to a specific value, a random initialization is performed: the initial values are drawn from a gaussian distribution
+with mean and standard deviation calculated from the observed values for each continuous variable. The second step of the (regularized) iterative FAMD algorithm is to perform FAMD on the completed dataset. Then, it imputes the missing values with the (regularized) reconstruction formulae of order ncp (the fitted matrix computed with ncp components for the (regularized) scores and loadings). These steps of estimation of the parameters via FAMD and imputation of the missing values using the (regularized) fitted matrix are iterate until convergence. \cr
+
+We advice to use the regularized version of the algorithm to avoid the overfitting problems which are very frequent when there are many missing values. In the regularized algorithm, the singular values of the FAMD are shrinked.\cr
+
+The output of the algorithm can be used as an input of the FAMD function of the FactoMineR package in order to perform FAMD on an incomplete dataset.
 }
 \value{
-  \item{completeObs}{the imputed dataset; the observed values for non-missing entries and the imputed values for missing values}
-  \item{tab.disj}{the imputed matrix in which categorical variables are coding by dummy variables. In the dummy variables, the imputed values are real numbers and may be seen as degree of membership to the corresponding category.}
+ \item{tab.disj}{the imputed matrix; the observed values are kept for the non-missing entries and the missing values are replaced by the predicted ones. The categorical variables are coded with the indicator matrix of dummy variables. In this indicator matrix, the imputed values are real numbers but they met the constraint that the sum of the entries corresponding to one individual and one variable is equal to one. Consequently they can be seen as degree of membership to the corresponding category}
+  \item{completeObs}{the mixed imputed dataset; the observed values are kept for the non-missing entries and the missing values are replaced by the predicted ones. For the continuous variables, the values are the same as in the tab.disj output; for the categorical variables missing values are imputed with the most plausible categories according to the values in the tab.disj output}
+ 
   \item{call}{the matched call}
 }
 
 \author{Francois Husson  \email{husson@agrocampus-ouest.fr} and Julie Josse  \email{Julie.Josse@agrocampus-ouest.fr}
 }
 
-\references{Audigier, V., Husson, F. & Josse, J. (2013). A principal components method to impute mixed data.}
+\references{Audigier, V., Husson, F. & Josse, J. (2013). A principal components method to impute mixed data. Submitted arXiv:1301.4797.}
 
 \seealso{\code{\link{imputePCA}}}
 \examples{
 data(ozone)
-res.comp <- imputeFAMD(ozone, ncp=3)
-res.afdm <- AFDM(ozone,tab.comp=res.comp)
+res.impute <- imputeFAMD(ozone, ncp=3) #
+res.afdm <- FAMD(ozone,tab.comp=res.impute) # the output can be used as an input of the FAMD function of the FactoMineR package to perform the FAMD on the incomplete data ozone 
 }
 \keyword{models}
 \keyword{multivariate}
