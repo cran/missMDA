@@ -19,6 +19,6 @@ Cornillon, P.-A., Guyader, A., Husson, F., Jégou, N., Josse, J., Kloareg, M., Ma
 \examples{
 data(ozone)
 res.comp <- imputeFAMD(ozone, ncp=3)
-res.afdm <- AFDM(ozone,tab.comp=res.comp)
+res.afdm <- FAMD(ozone,tab.comp=res.comp)
 }
 \keyword{datasets}

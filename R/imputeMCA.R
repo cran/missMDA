@@ -1,4 +1,4 @@
-imputeMCA <- function(don,ncp=2,row.w=NULL,coeff.ridge=1,threshold=1e-6,seed=NULL,maxiter=1000){   
+imputeMCA <- function(don,ncp=2,method=c("Regularized","EM"),row.w=NULL,coeff.ridge=1,threshold=1e-6,seed=NULL,maxiter=1000){   
  
     moy.p <- function(V, poids) {
         res <- sum(V * poids,na.rm=TRUE)/sum(poids[!is.na(V)])
@@ -44,6 +44,8 @@ find.category <- function (X,tabdisj){
     }
 
 ########## Debut programme principal
+method <- match.arg(method,c("Regularized","regularized","EM","em"),several.ok=T)[1]
+method = tolower(method)
 if (is.null(row.w)) row.w=rep(1/nrow(don),nrow(don))
 if (ncp==0) return(list(tab.disj=tab.disjonctif.prop(don,NULL,row.w=row.w),completeObs = find.category(don,tab.disjonctif.prop(don,NULL,row.w=row.w))))
 
@@ -70,6 +72,7 @@ while (continue){
   if (nrow(don)>(ncol(Zscale)-ncol(don))) moyeig=mean(svd.Zscale$vs[-c(1:ncp,(ncol(Zscale)-ncol(don)+1):ncol(Zscale))]^2)
   else moyeig=mean(svd.Zscale$vs[-c(1:ncp)]^2)
   moyeig=min(moyeig*coeff.ridge,svd.Zscale$vs[ncp+1]^2)
+  if (method=="em") moyeig <-0
   eig.shrunk=((svd.Zscale$vs[1:ncp]^2-moyeig)/svd.Zscale$vs[1:ncp])
 
   if (ncp==1) rec=tcrossprod(svd.Zscale$U[,1]*eig.shrunk,svd.Zscale$V[,1])

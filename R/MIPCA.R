@@ -1,6 +1,7 @@
-MIPCA <- function(X,ncp=2,scale=TRUE,method="Regularized",threshold=1e-4,nboot=100){
+MIPCA <- function(X,ncp=2,scale=TRUE,method=c("Regularized","EM"),threshold=1e-4,nboot=100){
 
 ## Initialization
+  method <- match.arg(method,c("Regularized","regularized","EM","em"),several.ok=T)[1]
   method <- tolower(method)
   missing <- which(is.na(X))
   impute.data <- imputePCA(X,scale=scale,ncp=ncp,method=method,threshold=threshold)$completeObs
