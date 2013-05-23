@@ -32,6 +32,7 @@ The multiple imputation is proper in the sense of Little and Rubin (2002) since 
 
 \seealso{\code{\link{imputePCA}},\code{\link{plot.MIPCA}}}
 \examples{
+\dontrun{
 data(orange)
 ## First the number of components has to be chosen 
 ##   (for the reconstruction step)
@@ -43,5 +44,5 @@ resMI <- MIPCA(orange,ncp=2)
 ## Visualization on the PCA map
 plot(resMI)
 }
-
+}
 \keyword{multivariate}

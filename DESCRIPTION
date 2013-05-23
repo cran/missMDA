@@ -2,8 +2,8 @@ Package: missMDA
 Type: Package
 Title: Handling missing values with/in multivariate data analysis
         (principal component methods)
-Version: 1.7
-Date: 2013-03-31
+Version: 1.7.1
+Date: 2013-05-23
 Author: Francois Husson, Julie Josse
 Maintainer: Francois Husson <husson@agrocampus-ouest.fr>
 Description: Imputation of incomplete continuous or categorical
@@ -17,7 +17,7 @@ URL: http://www.agrocampus-ouest.fr/math/husson,
         http://www.agrocampus-ouest.fr/math/josse
 Encoding: latin1
 LazyLoad: yes
-Packaged: 2013-03-30 18:54:27 UTC; husson
+Packaged: 2013-05-23 12:58:21 UTC; husson
 NeedsCompilation: no
 Repository: CRAN
-Date/Publication: 2013-03-30 20:11:12
+Date/Publication: 2013-05-23 15:53:53

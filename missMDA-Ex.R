@@ -4,7 +4,7 @@ options(warn = 1)
 options(pager = "console")
 library('missMDA')
 
-assign(".oldSearch", search(), pos = 'CheckExEnv')
+base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
 cleanEx()
 nameEx("MIPCA")
 ### * MIPCA
@@ -18,16 +18,18 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-data(orange)
-## First the number of components has to be chosen 
-##   (for the reconstruction step)
-## nb <- estim_ncpPCA(orange,ncp.max=5) ## Time consuming, nb = 2
-
-## Multiple Imputation
-resMI <- MIPCA(orange,ncp=2)
-
-## Visualization on the PCA map
-plot(resMI)
+## Not run: 
+##D data(orange)
+##D ## First the number of components has to be chosen 
+##D ##   (for the reconstruction step)
+##D ## nb <- estim_ncpPCA(orange,ncp.max=5) ## Time consuming, nb = 2
+##D 
+##D ## Multiple Imputation
+##D resMI <- MIPCA(orange,ncp=2)
+##D 
+##D ## Visualization on the PCA map
+##D plot(resMI)
+## End(Not run)
 
 
 
@@ -87,8 +89,10 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 data(ozone)
-res.impute <- imputeFAMD(ozone, ncp=3) #
-res.afdm <- FAMD(ozone,tab.comp=res.impute) # the output can be used as an input of the FAMD function of the FactoMineR package to perform the FAMD on the incomplete data ozone 
+res.impute <- imputeFAMD(ozone, ncp=3) 
+## The output can be used as an input of the FAMD function of the FactoMineR package 
+##to perform the FAMD on the incomplete data ozone 
+res.afdm <- FAMD(ozone,tab.comp=res.impute) 
 
 
 
@@ -112,7 +116,10 @@ data(vnf)
 
 ## Impute the indicator matrix and perform a MCA
 res.impute <- imputeMCA(vnf, ncp=4)
-res.mca <- MCA(vnf,tab.disj=res.impute$tab.disj) # the imputed indicator matrix can be used as an input of the MCA function of the FactoMineR package to perform the MCA on the incomplete data ozone 
+
+## The imputed indicator matrix can be used as an input of the MCA function of the
+## FactoMineR package to perform the MCA on the incomplete data ozone 
+res.mca <- MCA(vnf,tab.disj=res.impute$tab.disj) 
 
 
 
@@ -132,14 +139,20 @@ flush(stderr()); flush(stdout())
 
 data(orange)
 ## Impute the data and perform a MFA
-res.impute <- imputeMFA(orange,group=c(5,3),type=rep("s",2),ncp=2) # groups of continuous variables only
-res.mfa <- MFA(res.impute$completeObs,group=c(5,3),type=rep("s",2)) # the imputed data can be used as an input of the MFA function of the FactoMineR package to perform the MFA on the incomplete data 
+# Example with groups of continuous variables only
+res.impute <- imputeMFA(orange,group=c(5,3),type=rep("s",2),ncp=2) 
+# The imputed data can be used as an input of the MFA function of the FactoMineR package 
+# to perform the MFA on the incomplete data 
+res.mfa <- MFA(res.impute$completeObs,group=c(5,3),type=rep("s",2)) 
 
 ## Not run: 
 ##D data(vnf)
-##D ## Impute the indicator matrix and perform a MFA # groups of categorical variables only
+##D ## Impute the indicator matrix and perform a MFA 
+##D # Example with groups of categorical variables only
 ##D res.comp <- imputeMFA(vnf,group=c(6,5,3),type=c("n","n","n"),ncp=2)
-##D res.mfa <- MFA(vnf,group=c(6,5,3),type=c("n","n","n"),tab.comp=res.comp) # the output can be used as an input of the MFA function of the FactoMineR package to perform the MFA on the incomplete data 
+##D # The output can be used as an input of the MFA function of the FactoMineR package 
+##D # to perform the MFA on the incomplete data 
+##D res.mfa <- MFA(vnf,group=c(6,5,3),type=c("n","n","n"),tab.comp=res.comp) 
 ## End(Not run)
 
 
@@ -227,10 +240,12 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-data(orange)
-## nb <- estim_ncpPCA(orange,ncp.max=5) ## Time consuming, nb = 2
-resMI <- MIPCA(orange,ncp=2)
-plot(resMI)
+## Not run: 
+##D data(orange)
+##D ## nb <- estim_ncpPCA(orange,ncp.max=5) ## Time consuming, nb = 2
+##D resMI <- MIPCA(orange,ncp=2)
+##D plot(resMI)
+## End(Not run)
 
 
 
@@ -255,7 +270,7 @@ res.mca <- MCA(vnf,tab.disj=tab.disj.impute)
 
 ### * <FOOTER>
 ###
-cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
+base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
 grDevices::dev.off()
 ###
 ### Local variables: ***

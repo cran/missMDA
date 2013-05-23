@@ -108,7 +108,7 @@ el=coord.ellipse(cbind.data.frame(as.factor(rep(rownames(res$call$X),res$call$nb
 }
 
 if ((choice=="all")|(choice=="dim")){
-  if (new.plot) dev.new()
+  if ((new.plot)&!nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))) dev.new()
   colnames(res.dim)=paste("V",1:ncol(res.dim))
   ooo=PCA(res.dim,quanti.sup=(ncol(res$call$X)+1):ncol(res.dim),scale.unit=res$call$scale,graph=FALSE)
   ooo$eig=reference$eig
@@ -117,7 +117,7 @@ if ((choice=="all")|(choice=="dim")){
 }
 
 if ((choice=="all")|(choice=="ind.supp")){
-  if (new.plot) dev.new()
+  if ((new.plot)&!nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))) dev.new()
   oo=PCA(res.supp,ind.sup=c((nrow(res$call$X)+1):nrow(res.supp)),scale.unit=res$call$scale,graph=FALSE)
   el=coord.ellipse(cbind.data.frame(as.factor(rep(rownames(res$call$X),res$call$nboot)),oo$ind.sup$coord[,1:2]),level.conf = level.conf) 
   if (is.null(main)) title="Supplementary projection"    
@@ -130,7 +130,7 @@ if ((choice=="all")|(choice=="ind.supp")){
 }
 
 if ((choice=="all")|(choice=="var")){
-  if (new.plot) dev.new()
+  if ((new.plot)&!nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))) dev.new()
   color = c("black", "red", "green3", "blue", "cyan", "magenta", 
             "darkgray", "darkgoldenrod", "darkgreen", "violet", 
             "turquoise", "orange", "lightpink", "lavender", "yellow", 
@@ -140,12 +140,11 @@ if ((choice=="all")|(choice=="var")){
             "darkslateblue", "darkslategray", "darkslategrey", 
             "darkturquoise", "darkviolet", "lightgray", "lightsalmon", 
             "lightyellow", "maroon")
-
   colnames(res.var)=paste("V",1:ncol(res.var))
   colnames(res.var)[1:ncol(res$call$X)]=colnames(res$call$X)
   oo=PCA(res.var,quanti.sup=c((ncol(res$call$X)+1):ncol(res.var)),scale.unit=res$call$scale,graph=FALSE)
   if (is.null(main)) title="Variable representation"    
-  plot(oo, axes=axes, choix = "var", title=title,invisible = "quanti.sup", fill = color[1:ncol(res$call$X)],new.plot=FALSE)
+  plot(oo, axes=axes, choix = "var", title=title,invisible = "quanti.sup", col.hab = color[1:ncol(res$call$X)],new.plot=FALSE)
   for (k in 1:res$call$nboot) points(oo$quanti.sup$coord[((k-1)*ncol(res$call$X)+1):(k*ncol(res$call$X)),axes[1]], oo$quanti.sup$coord[((k-1)*ncol(res$call$X)+1):(k*ncol(res$call$X)),axes[2]], col = color[1:ncol(res$call$X)], pch = 15, cex = 0.3)
 }
 }
