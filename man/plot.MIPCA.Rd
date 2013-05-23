@@ -38,9 +38,11 @@ Four graphs can be drawn:
 
 \seealso{\code{\link{MIPCA}},\code{\link{imputePCA}}}
 \examples{
+\dontrun{
 data(orange)
 ## nb <- estim_ncpPCA(orange,ncp.max=5) ## Time consuming, nb = 2
 resMI <- MIPCA(orange,ncp=2)
 plot(resMI)
+}
 }
 \keyword{dplot}

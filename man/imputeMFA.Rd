@@ -47,14 +47,20 @@ The output of the algorithm can be used as an input of the MFA function of the F
 \examples{
 data(orange)
 ## Impute the data and perform a MFA
-res.impute <- imputeMFA(orange,group=c(5,3),type=rep("s",2),ncp=2) # groups of continuous variables only
-res.mfa <- MFA(res.impute$completeObs,group=c(5,3),type=rep("s",2)) # the imputed data can be used as an input of the MFA function of the FactoMineR package to perform the MFA on the incomplete data 
+# Example with groups of continuous variables only
+res.impute <- imputeMFA(orange,group=c(5,3),type=rep("s",2),ncp=2) 
+# The imputed data can be used as an input of the MFA function of the FactoMineR package 
+# to perform the MFA on the incomplete data 
+res.mfa <- MFA(res.impute$completeObs,group=c(5,3),type=rep("s",2)) 
 
 \dontrun{
 data(vnf)
-## Impute the indicator matrix and perform a MFA # groups of categorical variables only
+## Impute the indicator matrix and perform a MFA 
+# Example with groups of categorical variables only
 res.comp <- imputeMFA(vnf,group=c(6,5,3),type=c("n","n","n"),ncp=2)
-res.mfa <- MFA(vnf,group=c(6,5,3),type=c("n","n","n"),tab.comp=res.comp) # the output can be used as an input of the MFA function of the FactoMineR package to perform the MFA on the incomplete data 
+# The output can be used as an input of the MFA function of the FactoMineR package 
+# to perform the MFA on the incomplete data 
+res.mfa <- MFA(vnf,group=c(6,5,3),type=c("n","n","n"),tab.comp=res.comp) 
 }
 }
 \keyword{models}

@@ -52,8 +52,10 @@ data(vnf)
 
 ## Impute the indicator matrix and perform a MCA
 res.impute <- imputeMCA(vnf, ncp=4)
-res.mca <- MCA(vnf,tab.disj=res.impute$tab.disj) # the imputed indicator matrix can be used as an input of the MCA function of the FactoMineR package to perform the MCA on the incomplete data ozone 
-}
 
+## The imputed indicator matrix can be used as an input of the MCA function of the
+## FactoMineR package to perform the MCA on the incomplete data ozone 
+res.mca <- MCA(vnf,tab.disj=res.impute$tab.disj) 
+}
 \keyword{models}
 \keyword{multivariate}

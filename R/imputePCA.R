@@ -77,7 +77,7 @@ impute <- function (X, ncp = 4, scale=TRUE, method=NULL,threshold = 1e-6,seed = 
  if (is.null(row.w)) row.w = rep(1,nrow(X))/nrow(X)
  for (i in 1:nb.init){
   if (!any(is.na(X))) return(X)
-  res.impute=impute(X, ncp=ncp, scale=scale, method=method, threshold = threshold,seed=if(!is.null(seed)){(seed*(i-1))}else{i},init=i,maxiter=maxiter,row.w=row.w,coeff.ridge=coeff.ridge)
+  res.impute=impute(X, ncp=ncp, scale=scale, method=method, threshold = threshold,seed=if(!is.null(seed)){(seed*(i-1))}else{NULL},init=i,maxiter=maxiter,row.w=row.w,coeff.ridge=coeff.ridge)
   if (mean((res.impute$recon[!is.na(X)]-X[!is.na(X)])^2) < obj){
     res <- res.impute
     obj <- mean((res.impute$recon[!is.na(X)]-X[!is.na(X)])^2)
