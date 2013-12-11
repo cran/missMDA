@@ -3,18 +3,18 @@
 \title{Impute dataset with variables structured into groups of variables (groups of continuous or categorical variables)}
 \description{Impute the missing values of a dataset with Multiple Factor Analysis (MFA). The variables are structured a priori into groups of variables. The variables can be continuous or categorical but within a group the nature of the variables is the same.  Can be used as a preliminary step before performing MFA on an incomplete dataset.}
 
-\usage{imputeMFA(X, group, ncp = 2, type=rep("s",length(group)), method=c("Regularized","EM"), 
-       row.w = NULL,coeff.ridge=1,threshold = 1e-06, seed = NULL, maxiter = 1000,...)
+\usage{imputeMFA(X, group, ncp = 2, type=rep("s",length(group)), method = c("Regularized","EM"), 
+       row.w = NULL, coeff.ridge = 1,threshold = 1e-06, seed = NULL, maxiter = 1000, ...)
 	   }
 
 \arguments{
   \item{X}{a data.frame with groups of continuous or categorical variables containing missing values}
-  \item{group}{a list indicating the number of variables in each group}
-  \item{ncp}{integer corresponding to the number of components used to  to predict the missing entries}
+  \item{group}{a vector indicating the number of variables in each group}
+  \item{ncp}{integer corresponding to the number of components used to predict the missing entries}
   \item{type}{the type of variables in each group; three possibilities: "c" or "s" for continuous variables
   (for "c" the variables are centered and for "s" variables are scaled to unit variance), "n" for categorical variables}
   \item{method}{"Regularized" by default or "EM"}
-  \item{row.w}{row weights by default, a vector of 1 for uniform row weights)}
+  \item{row.w}{row weights (by default, a vector of 1 for uniform row weights)}
   \item{coeff.ridge}{1 by default to perform the regularized imputeMFA algorithm; useful only if method="Regularized". Other regularization terms can be implemented by setting the value to less than 1 in order to regularized less (to get closer to the results of the EM method) or more than 1 to regularized more}
   \item{threshold}{the threshold for assessing convergence}
   \item{seed}{integer, by default seed = NULL implies that missing values are initially imputed by the mean of each variable for the continuous variables and by the proportion of the category for the categorical variables coded with indicator matrices of dummy variables. Other values leads to a random initialization}
@@ -37,7 +37,7 @@ The output of the algorithm can be used as an input of the MFA function of the F
   \item{call}{the matched call}
 }
 
-\references{F. Husson, J. Josse (2013) Handling missing values in multiple factor analysis. Submitted.}
+\references{F. Husson, J. Josse (2013) Handling missing values in multiple factor analysis. Food Quality and Preferences, 30 (2), 77-85.}
 
 \author{Francois Husson  \email{husson@agrocampus-ouest.fr} and Julie Josse  \email{Julie.Josse@agrocampus-ouest.fr}
 }
@@ -47,20 +47,16 @@ The output of the algorithm can be used as an input of the MFA function of the F
 \examples{
 data(orange)
 ## Impute the data and perform a MFA
-# Example with groups of continuous variables only
-res.impute <- imputeMFA(orange,group=c(5,3),type=rep("s",2),ncp=2) 
-# The imputed data can be used as an input of the MFA function of the FactoMineR package 
-# to perform the MFA on the incomplete data 
+## with groups of continuous variables only
+res.impute <- imputeMFA(orange, group=c(5,3), type=rep("s",2),ncp=2) 
 res.mfa <- MFA(res.impute$completeObs,group=c(5,3),type=rep("s",2)) 
 
 \dontrun{
 data(vnf)
 ## Impute the indicator matrix and perform a MFA 
-# Example with groups of categorical variables only
+## with groups of categorical variables only
 res.comp <- imputeMFA(vnf,group=c(6,5,3),type=c("n","n","n"),ncp=2)
-# The output can be used as an input of the MFA function of the FactoMineR package 
-# to perform the MFA on the incomplete data 
-res.mfa <- MFA(vnf,group=c(6,5,3),type=c("n","n","n"),tab.comp=res.comp) 
+res.mfa <- MFA(vnf,group=c(6,5,3),type=c("n","n","n"),tab.comp=res.comp)
 }
 }
 \keyword{models}
