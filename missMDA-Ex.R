@@ -76,6 +76,54 @@ flush(stderr()); flush(stdout())
 
 
 cleanEx()
+nameEx("gene")
+### * gene
+
+flush(stderr()); flush(stdout())
+
+### Name: gene
+### Title: Gene expression
+### Aliases: gene
+### Keywords: datasets
+
+### ** Examples
+
+data(gene)
+res.impute <- imputeMFA(gene[,-1], group = c(76,356), 
+    type = rep("s",2), ncp = 2) 
+res.mfa <- MFA(cbind.data.frame(gene[,1], res.impute$completeObs), 
+      group = c(1,76,356), type=c("n",rep("s",2)), 
+	  name.group = c("WHO","CGH","expr"), num.group.sup = 1)
+plot.MFA(res.mfa, habillage = 1, lab.ind = FALSE)
+plot.MFA(res.mfa, habillage = "group", invisible = "ind", partial = "all")
+plot.MFA(res.mfa, habillage = "group", lab.ind = FALSE, partial = "all")
+plot.MFA(res.mfa, choix = "var", habillage = "group", lab.var = FALSE)
+plot.MFA(res.mfa, choix = "group", habillage = "group")
+
+
+
+cleanEx()
+nameEx("geno")
+### * geno
+
+flush(stderr()); flush(stdout())
+
+### Name: geno
+### Title: Genotype-environment data set with missing values
+### Aliases: geno
+### Keywords: datasets
+
+### ** Examples
+
+data(geno)
+
+res.ncp.gcv <- estim_ncpPCA(geno)
+res.imp <- imputePCA(geno, ncp= res.ncp.gcv$ncp)
+res.pca <- PCA(res.imp$completeObs)
+
+
+
+cleanEx()
 nameEx("imputeFAMD")
 ### * imputeFAMD
 
@@ -139,20 +187,16 @@ flush(stderr()); flush(stdout())
 
 data(orange)
 ## Impute the data and perform a MFA
-# Example with groups of continuous variables only
-res.impute <- imputeMFA(orange,group=c(5,3),type=rep("s",2),ncp=2) 
-# The imputed data can be used as an input of the MFA function of the FactoMineR package 
-# to perform the MFA on the incomplete data 
+## with groups of continuous variables only
+res.impute <- imputeMFA(orange, group=c(5,3), type=rep("s",2),ncp=2) 
 res.mfa <- MFA(res.impute$completeObs,group=c(5,3),type=rep("s",2)) 
 
 ## Not run: 
 ##D data(vnf)
 ##D ## Impute the indicator matrix and perform a MFA 
-##D # Example with groups of categorical variables only
+##D ## with groups of categorical variables only
 ##D res.comp <- imputeMFA(vnf,group=c(6,5,3),type=c("n","n","n"),ncp=2)
-##D # The output can be used as an input of the MFA function of the FactoMineR package 
-##D # to perform the MFA on the incomplete data 
-##D res.mfa <- MFA(vnf,group=c(6,5,3),type=c("n","n","n"),tab.comp=res.comp) 
+##D res.mfa <- MFA(vnf,group=c(6,5,3),type=c("n","n","n"),tab.comp=res.comp)
 ## End(Not run)
 
 
@@ -246,6 +290,25 @@ flush(stderr()); flush(stdout())
 ##D resMI <- MIPCA(orange,ncp=2)
 ##D plot(resMI)
 ## End(Not run)
+
+
+
+cleanEx()
+nameEx("snorena")
+### * snorena
+
+flush(stderr()); flush(stdout())
+
+### Name: snorena
+### Title: Characterization of people who snore
+### Aliases: snorena
+### Keywords: datasets
+
+### ** Examples
+
+data(snorena)
+res.comp <- imputeFAMD(snorena, ncp=3)
+res.afdm <- FAMD(snorena, tab.comp = res.comp)
 
 
 

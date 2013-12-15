@@ -1,9 +1,9 @@
 \name{imputePCA}
 \alias{imputePCA}
 \title{Impute dataset with PCA}
-\description{Impute the missing values of a dataset with the Principal Components Analysis model. Can be used as a preliminary step before performing a PCA on an incomplete dataset.}
-\usage{imputePCA(X, ncp = 2, scale = TRUE, method=c("Regularized","EM"), 
-       row.w=NULL, coeff.ridge=1, threshold = 1e-06, seed = NULL, nb.init = 1,  
+\description{Impute the missing values of a dataset with the Principal Components Analysis model. Can be used as a preliminary step before performing a PCA on an completed dataset.}
+\usage{imputePCA(X, ncp = 2, scale = TRUE, method = c("Regularized","EM"), 
+       row.w = NULL, coeff.ridge = 1, threshold = 1e-06, seed = NULL, nb.init = 1,  
 	   maxiter = 1000, ...)
 }
 
@@ -37,7 +37,7 @@ The output of the algorithm can be used as an input of the PCA function of the F
 \author{Francois Husson  \email{husson@agrocampus-ouest.fr} and Julie Josse  \email{Julie.Josse@agrocampus-ouest.fr}
 }
 
-\seealso{\code{\link{estim_ncpPCA}},\code{\link{MIPCA}}}
+\seealso{\code{\link{estim_ncpPCA}}, \code{\link{MIPCA}}}
 \examples{
 data(orange)
 ## First the number of components has to be chosen 
