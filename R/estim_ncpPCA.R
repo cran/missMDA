@@ -25,7 +25,7 @@ crit <- NULL
 #        rec = reconst(res.pca, ncp = q)
         rec = imputePCA(X,scale=scale,ncp=q,method=method,maxiter=1000)$recon
         crit = c(crit, mean(((n * p - sum(is.na(X))) * (X - rec)/((n-1) * p - sum(is.na(X)) - q * (n + p - q-1)))^2, na.rm = T))
-		}
+	}
   if (any(diff(crit)>0)) { ncp = which(diff(crit)>0)[1]
   } else ncp <- which.min(crit)
  names(crit) <- c(ncp.min:ncp.max)

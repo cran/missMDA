@@ -52,6 +52,7 @@ find.category <- function (X,tabdisj){
    method <- match.arg(method,c("Regularized","regularized","EM","em"),several.ok=T)[1]
    method <- tolower(method)
    if (!is.null(seed)) set.seed(seed)
+   X <- droplevels(X)
    if ("n"%in%type){
       niveau = NULL
       for (j in 1:ncol(X)){

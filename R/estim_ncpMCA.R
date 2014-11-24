@@ -1,4 +1,4 @@
-estim_ncpMCA <- function(don,ncp.min=0,ncp.max=5,method=c("Regularized","EM"),method.cv=c("gcv","loo","Kfold"),nbsim=100,pNA=0.05,threshold=1e-4){
+estim_ncpMCA <- function(don,ncp.min=0,ncp.max=5,method=c("Regularized","EM"),method.cv=c("Kfold","loo"),nbsim=100,pNA=0.05,threshold=1e-4){
 
 #### Debut tab.disjonctif.NA
 tab.disjonctif.NA<-function (tab) {
@@ -31,38 +31,14 @@ tab.disjonctif.NA<-function (tab) {
 ########## Debut programme principal
 
   method <- match.arg(method,c("Regularized","regularized","EM","em"),several.ok=T)[1]
-method.cv <- match.arg(method.cv,c("gcv","loo","Kfold","GCV","kfold","LOO"),several.ok=T)[1]
+method.cv <- match.arg(method.cv,c("loo","Kfold","kfold","LOO"),several.ok=T)[1]
 method <- tolower(method)
 method.cv <- tolower(method.cv)
 auxi = NULL
+don <- droplevels(don)
 for (j in 1:ncol(don)) if (is.numeric(don[,j])) auxi = c(auxi,colnames(don)[j])
 if (!is.null(auxi)) stop(paste("\nAll variables are not categorical, the following ones are numeric: ", auxi))
 vrai.tab=tab.disjonctif.NA(don)
-
-if (method.cv=="gcv"){
-p=ncol(don)
-n=nrow(don)
-crit <- NULL
-tabX <- tab.disjonctif.NA(don)
-if (is.null(ncp.max)) ncp.max <- ncol(tabX)-ncol(don)-1
-ncp.max <- min(nrow(tabX)-2,ncol(tabX)-ncol(don)-1,ncp.max)
-pquali <- ncol(tabX)
-if (ncp.min == 0) crit = mean((tabX - rep(colMeans(tabX, na.rm = TRUE), each = nrow(tabX)))^2, na.rm = TRUE)
-    for (q in max(ncp.min,1):ncp.max) {
-        Z <- imputeMCA(don,ncp=q,method=method)$tab.disj
-        Z <- scale(Z)*sqrt(nrow(Z)/(nrow(Z)-1))/sqrt(ncol(Z))
-        ponder <- 1-apply(Z/nrow(Z), 2, sum)
-        Z <- sweep(Z,2,sqrt(ponder),FUN="*")
-        Z <- scale(Z,scale=FALSE)
-        res.pca = PCA(Z, scale.unit = FALSE, graph = FALSE, ncp = max(q, 2))
-        rec = reconst(res.pca, ncp = q)
-        crit=c(crit,mean(( (n*(p-pquali))*(tabX-rec)/ (n*(p-pquali)- q*(n+p-pquali-q)))^2,na.rm=T))
-    }
-  if (any(diff(crit)>0)) { ncp = which(diff(crit)>0)[1]
-  } else ncp <- which.min(crit)
- names(crit) <- c(ncp.min:ncp.max)
-  return(list(ncp = as.integer(ncp+ncp.min-1),criterion=crit))
-}
 
 if (method.cv=="kfold"){
 res = matrix(NA,ncp.max-ncp.min+1,nbsim)
@@ -73,7 +49,7 @@ for (sim in 1:nbsim){
  for (i in 1:ncol(don)) donNA[,i]=as.factor(as.character(donNA[,i]))
  for (nbaxes in ncp.min:ncp.max){
   tab.disj.comp <- imputeMCA(as.data.frame(donNA),ncp=nbaxes,method=method,threshold=threshold)$tab.disj
-  if (sum(!(which(is.na(donNA))%in%which(is.na(don))))!=0) res[nbaxes-ncp.min+1,sim] <- sum((tab.disj.comp-vrai.tab)^2,na.rm=TRUE)/sum(!(which(is.na(donNA))%in%which(is.na(don))))
+  if (sum(is.na(donNA))!=sum(is.na(don))) res[nbaxes-ncp.min+1,sim] <- sum((tab.disj.comp-vrai.tab)^2,na.rm=TRUE)/(sum(is.na(tab.disjonctif.NA(donNA)))-sum(is.na(tab.disjonctif.NA(don))))
  }
 }
 crit=apply(res,1,mean,na.rm=TRUE)

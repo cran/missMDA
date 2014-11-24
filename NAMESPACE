@@ -1,1 +1,2 @@
 export(estim_ncpPCA,estim_ncpMCA,imputeFAMD,imputeMCA,imputeMFA,imputePCA,MIPCA,plot.MIPCA)
+import(FactoMineR)

@@ -4,14 +4,14 @@
 \description{Estimate the number of dimensions for the Multiple Correspondence Analysis by cross-validation}
 \usage{
 estim_ncpMCA(don, ncp.min=0, ncp.max=5,  method = c("Regularized","EM"), 
-     method.cv = c("gcv","loo","Kfold"), nbsim=100, pNA=0.05, threshold=1e-4)
+     method.cv = c("Kfold","loo"), nbsim=100, pNA=0.05, threshold=1e-4)
 }
 \arguments{
   \item{don}{a data.frame with categorical variables; with missing entries or not}
   \item{ncp.min}{integer corresponding to the minimum number of components to test}
   \item{ncp.max}{integer corresponding to the maximum number of components to test}
   \item{method}{"Regularized" by default or "EM"}
-  \item{method.cv}{string with the values "gcv" for generalised cross-validation, "loo" for leave-one-out or "Kfold" for cross-validation}
+  \item{method.cv}{"Kfold" for cross-validation or "loo" for leave-one-out}
   \item{nbsim}{number of simulations, useful only if method.cv="Kfold"}
   \item{pNA}{percentage of missing values added in the data set, useful only if method.cv="Kfold"}
   \item{threshold}{the threshold for assessing convergence}

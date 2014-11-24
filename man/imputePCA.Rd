@@ -37,7 +37,8 @@ The output of the algorithm can be used as an input of the PCA function of the F
 \author{Francois Husson  \email{husson@agrocampus-ouest.fr} and Julie Josse  \email{Julie.Josse@agrocampus-ouest.fr}
 }
 
-\seealso{\code{\link{estim_ncpPCA}}, \code{\link{MIPCA}}}
+\seealso{\code{\link{estim_ncpPCA}}, \code{\link{MIPCA}},\cr
+\href{https://www.youtube.com/watch?v=YDbx2pk9xNY&list=PLnZgp6epRBbQzxFnQrcxg09kRt-PA66T_&index=2}{Video showing how to perform PCA on an incomplete dataset}}
 \examples{
 data(orange)
 ## First the number of components has to be chosen 
