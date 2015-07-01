@@ -35,9 +35,9 @@ This argument scale has to be chosen in agreement with the PCA that will be perf
   \item{ncp}{the number of components retained for the PCA}
   \item{criterion}{the criterion (the MSEP) calculated for each number of components}
 }
-\references{Bro, R., Kjeldahl, K. Smilde, A. K. and Kiers, H. A. L. (2008) Cross-validation of component models: A critical look at current methods. 	Analytical and Bioanalytical Chemistry, 5, 1241-1251.\cr
+\references{Bro, R., Kjeldahl, K. Smilde, A. K. and Kiers, H. A. L. (2008) Cross-validation of component models: A critical look at current methods. Analytical and Bioanalytical Chemistry, 5, 1241-1251.\cr
 
-Josse, J. and Husson, F. (2011). Selecting the number of components in PCA using cross-validation approximations. Computational Statististics and Data Analysis. 56 (6), pp. 1869-1879.}
+Josse, J. and Husson, F. (2011). Selecting the number of components in PCA using cross-validation approximations. Computational Statistics and Data Analysis. 56 (6), pp. 1869-1879.}
 
 
 \author{Francois Husson  \email{husson@agrocampus-ouest.fr} and Julie Josse  \email{Julie.Josse@agrocampus-ouest.fr}

@@ -22,8 +22,8 @@ triticale. Plant Breeding, 111, 113- 119.}
 \examples{
 data(geno)
 
-res.ncp.gcv <- estim_ncpPCA(geno)
-res.imp <- imputePCA(geno, ncp= res.ncp.gcv$ncp)
+ncomp <- estim_ncpPCA(geno)
+res.imp <- imputePCA(geno, ncp= ncomp$ncp)
 res.pca <- PCA(res.imp$completeObs)
 }
 \keyword{datasets}

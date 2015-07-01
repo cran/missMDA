@@ -19,6 +19,6 @@ Cornillon, P.-A., Guyader, A., Husson, F., Jegou, N., Josse, J., Kloareg, M., Ma
 \examples{
 data(snorena)
 res.comp <- imputeFAMD(snorena, ncp=3)
-res.afdm <- FAMD(snorena, tab.comp = res.comp)
+res.afdm <- FAMD(snorena, tab.comp = res.comp$tab.disj)
 }
 \keyword{datasets}

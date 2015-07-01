@@ -1,2 +1,7 @@
 export(estim_ncpPCA,estim_ncpMCA,imputeFAMD,imputeMCA,imputeMFA,imputePCA,MIPCA,plot.MIPCA)
-import(FactoMineR)
+importFrom(graphics,plot,points)
+importFrom(grDevices,dev.new)
+importFrom(stats,sd,rnorm)
+importFrom(FactoMineR,PCA,MCA,MFA,FAMD,svd.triplet,coord.ellipse,reconst,tab.disjonctif.prop)
+
+S3method(plot, MIPCA)

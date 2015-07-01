@@ -25,10 +25,10 @@ res.impute <- imputeMFA(gene[,-1], group = c(76,356),
 res.mfa <- MFA(cbind.data.frame(gene[,1], res.impute$completeObs), 
       group = c(1,76,356), type=c("n",rep("s",2)), 
 	  name.group = c("WHO","CGH","expr"), num.group.sup = 1)
-plot.MFA(res.mfa, habillage = 1, lab.ind = FALSE)
-plot.MFA(res.mfa, habillage = "group", invisible = "ind", partial = "all")
-plot.MFA(res.mfa, habillage = "group", lab.ind = FALSE, partial = "all")
-plot.MFA(res.mfa, choix = "var", habillage = "group", lab.var = FALSE)
-plot.MFA(res.mfa, choix = "group", habillage = "group")
+plot(res.mfa, habillage = 1, lab.ind = FALSE)
+plot(res.mfa, habillage = "group", invisible = "ind", partial = "all")
+plot(res.mfa, habillage = "group", lab.ind = FALSE, partial = "all")
+plot(res.mfa, choix = "var", habillage = "group", lab.var = FALSE)
+plot(res.mfa, choix = "group", habillage = "group")
 }
 \keyword{datasets}

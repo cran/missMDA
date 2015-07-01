@@ -29,7 +29,7 @@ We advice to use the regularized version of the algorithm to avoid the overfitti
 The output of the algorithm can be used as an input of the PCA function of the FactoMineR package in order to perform PCA on an incomplete dataset.}
 \value{
   \item{completeObs}{the imputed dataset; the observed values are kept for the non-missing entries and the missing values are replaced by the predicted ones.}
-  \item{recon}{the reconstructed data}
+  \item{fittedX}{the reconstructed data}
 }
 
 \references{Josse, J & Husson, F. (2013). Handling missing values in exploratory multivariate data analysis methods. Journal de la SFdS. 153 (2), pp. 79-99.}
@@ -43,7 +43,7 @@ The output of the algorithm can be used as an input of the PCA function of the F
 data(orange)
 ## First the number of components has to be chosen 
 ##   (for the imputation step)
-## nb <- estim_ncpPCA(orange,ncp.max=5) ## Time consuming, nb = 2
+## nb <- ncpPCA(orange,ncp.max=5) ## Time consuming, nb = 2
 
 ## Imputation
 res.comp <- imputePCA(orange,ncp=2)

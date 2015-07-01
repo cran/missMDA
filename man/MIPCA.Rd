@@ -36,7 +36,7 @@ The multiple imputation is proper in the sense of Little and Rubin (2002) since 
 data(orange)
 ## First the number of components has to be chosen 
 ##   (for the reconstruction step)
-## nb <- estim_ncpPCA(orange,ncp.max=5) ## Time consuming, nb = 2
+## nb <- ncpPCA(orange,ncp.max=5) ## Time consuming, nb = 2
 
 ## Multiple Imputation
 resMI <- MIPCA(orange,ncp=2)

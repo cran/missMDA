@@ -23,7 +23,7 @@ crit <- NULL
     for (q in max(ncp.min, 1):ncp.max) {
 #        res.pca = PCA(imputePCA(X,scale=scale,ncp=q,method=method,maxiter=1000)$completeObs, scale = scale, graph = FALSE, ncp = max(q, 2))
 #        rec = reconst(res.pca, ncp = q)
-        rec = imputePCA(X,scale=scale,ncp=q,method=method,maxiter=1000)$recon
+        rec = imputePCA(X,scale=scale,ncp=q,method=method,maxiter=1000)$fittedX
         crit = c(crit, mean(((n * p - sum(is.na(X))) * (X - rec)/((n-1) * p - sum(is.na(X)) - q * (n + p - q-1)))^2, na.rm = T))
 	}
   if (any(diff(crit)>0)) { ncp = which(diff(crit)>0)[1]

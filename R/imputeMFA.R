@@ -78,10 +78,10 @@ find.category <- function (X,tabdisj){
         if (type[g] == "s") {
           Xhat2 <- cbind.data.frame(Xhat2, aux.base)
 		  MM[[g]] <- apply(as.data.frame(aux.base), 2, moy.p, row.w)
-          aux.base <- as.matrix(sweep(as.data.frame(aux.base), 2, MM[[g]], FUN = "-"))
+          aux.base <- t(t(as.matrix(aux.base))-MM[[g]])
           ET[[g]] <- apply(as.data.frame(aux.base), 2, ec, row.w)
 #          ET[[g]][ET[[g]] <= 1e-08] <- 1
-          aux.base <- as.matrix(sweep(as.data.frame(aux.base), 2, ET[[g]], FUN = "/"))
+          aux.base <- t(t(as.matrix(aux.base))/ET[[g]])
           missing <- which(is.na(as.matrix(aux.base)))
           if (any(is.na(aux.base))) aux.base[missing] <- 0
           ponderation[g] <- svd.triplet(aux.base,ncp=1,row.w=row.w)$vs[1]
@@ -91,7 +91,7 @@ find.category <- function (X,tabdisj){
         if (type[g] == "c") {
           Xhat2 <- cbind.data.frame(Xhat2, aux.base)
 		  MM[[g]] <- apply(as.data.frame(aux.base), 2, moy.p,row.w)
-          aux.base <- as.matrix(sweep(as.data.frame(aux.base), 2, MM[[g]], FUN = "-"))
+          aux.base <- t(t(as.matrix(aux.base))-MM[[g]])
           missing <- which(is.na(as.matrix(aux.base)))
           if (any(is.na(aux.base))) aux.base[missing] <- 0       
           ponderation[g] = svd.triplet(aux.base,ncp=1,row.w=row.w)$vs[1]		 
@@ -103,9 +103,9 @@ find.category <- function (X,tabdisj){
 		   tab.disj.comp[[g]] = tab.disj
 		   group.mod[g] <- ncol(tab.disj)
            MM[[g]] = apply(tab.disj, 2, moy.p,row.w)/ncol(aux.base)
-           Z = sweep(tab.disj, 2, apply(tab.disj, 2, moy.p,row.w), FUN = "/")
-           Z = sweep(Z, 2,apply(Z,2,moy.p,row.w),FUN="-")
-	       Zscale = sweep(Z, 2, sqrt(MM[[g]]), FUN = "*")
+           Z = t(t(tab.disj)/apply(tab.disj, 2, moy.p,row.w))
+           Z = t(t(Z)-apply(Z,2,moy.p,row.w))
+	       Zscale = t(t(Z)*sqrt(MM[[g]]))
            ponderation[g] <- svd.triplet(Zscale,row.w=row.w)$vs[1]
 		   Xhat <- cbind.data.frame(Xhat, Zscale/ponderation[g])
            Xhat2 <- cbind.data.frame(Xhat2, as.data.frame(tab.disjonctif.NA(aux.base)))
@@ -114,60 +114,60 @@ find.category <- function (X,tabdisj){
    ind.var <- vector(mode = "list", length = length(group))
    ind.var[[1]] <- 1:group.mod[1]
    for (g in 2:length(group)) ind.var[[g]] <- (cumsum(group.mod)[g-1]+1):cumsum(group.mod)[g]
-   recon <- Xhat <- as.matrix(Xhat)
+   fittedX <- Xhat <- as.matrix(Xhat)
    if (ncp>=min(nrow(Xhat)-2,ncol(Xhat)-1)) stop("ncp is too large")
    ncp <- min(ncp,ncol(X)-1,nrow(X)-2)
    missing <- which(is.na(as.matrix(Xhat2)))
    nb.iter <- 1
    old <- Inf
    while (nb.iter > 0) {
-     Xhat[missing] <- recon[missing]
+     Xhat[missing] <- fittedX[missing]
  	 for (g in 1:length(group)){
        if (g==1) aux.base <- Xhat[,1:group.mod[1],drop=FALSE]
 	   else aux.base <- Xhat[,(cumsum(group.mod)[g-1]+1):cumsum(group.mod)[g],drop=FALSE]
  	   aux.base <- aux.base*ponderation[g]
        if (type[g] == "s") {
-		  aux.base <- sweep(aux.base,2,ET[[g]],FUN="*")
-		  aux.base <- sweep(aux.base,2,MM[[g]],FUN="+")
+		  aux.base <- t((t(aux.base)*ET[[g]])+MM[[g]])
 		  MM[[g]] <- apply(aux.base, 2, moy.p,row.w)
-		  aux.base <- sweep(aux.base,2,MM[[g]], FUN="-")
+		  aux.base <- t(t(aux.base)-MM[[g]])
 		  ET[[g]] <- apply(aux.base, 2, ec,row.w)
-		  aux.base <- sweep(aux.base,2,ET[[g]], FUN="/")
+		  aux.base <- t(t(aux.base)/ET[[g]])
 		  ponderation[g] = svd.triplet(aux.base,ncp=1,row.w=row.w)$vs[1]
        }
        if (type[g] == "c") {
-		  aux.base <- sweep(aux.base,2,MM[[g]],FUN="+")
+		  aux.base <- t(t(aux.base)+MM[[g]])
 		  MM[[g]] <- apply(aux.base, 2, moy.p,row.w)
-		  aux.base <- sweep(aux.base,2,MM[[g]], FUN="-")
+		  aux.base <- t(t(aux.base)-MM[[g]])
 		  ponderation[g] = svd.triplet(aux.base,ncp=1,row.w=row.w)$vs[1]
        }
        if (type[g] == "n") {
-          tab.disj = sweep(aux.base,2,sqrt(MM[[g]]),FUN="/") + matrix(1,nrow(aux.base),ncol(aux.base)) 
-          tab.disj = sweep(tab.disj,2,apply(tab.disj.comp[[g]],2,moy.p,row.w),FUN="*")
+          tab.disj = t(t(aux.base)/sqrt(MM[[g]])) + matrix(1,nrow(aux.base),ncol(aux.base)) 
+          tab.disj = t(t(tab.disj)*apply(tab.disj.comp[[g]],2,moy.p,row.w))
           tab.disj.comp[[g]] = tab.disj
           MM[[g]] = apply(tab.disj, 2, moy.p,row.w)/ncol(aux.base)
 		  if (any(MM[[g]]<0)) stop(paste("The algorithm fails to converge. Choose a number of components (ncp) less or equal than ",ncp-1," or a number of iteratsions (maxiter) less or equal than ",maxiter-1,sep=""))
-          Z = sweep(tab.disj, 2, apply(tab.disj, 2, moy.p,row.w), FUN = "/")
-          Z = sweep(Z, 2,apply(Z,2,moy.p,row.w),FUN="-")
-	      aux.base = sweep(Z, 2, sqrt(MM[[g]]), FUN = "*")
-          ponderation[g] <- svd.triplet(aux.base,row.w=row.w)$vs[1]
+          Z = t(t(tab.disj)/apply(tab.disj, 2, moy.p,row.w))
+          Z = t(t(Z)-apply(Z,2,moy.p,row.w))
+	      aux.base = t(t(Z)*sqrt(MM[[g]]))
+          ponderation[g] <- svd.triplet(aux.base,row.w=row.w,ncp=1)$vs[1]
        }
 	   if (g==1) Xhat[,1:group.mod[1]] <- aux.base / ponderation[g]
 	   else Xhat[,(cumsum(group.mod)[g-1]+1):cumsum(group.mod)[g]] <- aux.base / ponderation[g]
 	}
-	 svd.res <- svd.triplet(Xhat,row.w=row.w)
+	 svd.res <- svd.triplet(Xhat,row.w=row.w,ncp=ncp)
      sigma2 <- mean(svd.res$vs[-(1:ncp)]^2)
+#     sigma2  <- nrow(Xhat)*ncol(Xhat)/min(ncol(Xhat),nrow(Xhat)-1)* sum((svd.res$vs[-c(1:ncp)]^2)/((nrow(Xhat)-1) * ncol(Xhat) - (nrow(Xhat)-1) * ncp - ncol(Xhat) * ncp + ncp^2))
      sigma2 <- min(sigma2*coeff.ridge,svd.res$vs[ncp+1]^2)
 	 
      if (method=="em") sigma2 <-0
      lambda.shrinked=(svd.res$vs[1:ncp]^2-sigma2)/svd.res$vs[1:ncp]
-     if (ncp==1) recon=tcrossprod(sweep(svd.res$U[,1,drop=FALSE],1,row.w,FUN="*")*lambda.shrinked,svd.res$V[,1,drop=FALSE])
-     else recon=tcrossprod(sweep(sweep(svd.res$U[,1:ncp],1,row.w,FUN="*"),2,lambda.shrinked,FUN="*"),svd.res$V[,1:ncp])
-     recon <- sweep(recon,1,row.w,FUN="/")
+     if (ncp==1) fittedX=tcrossprod((svd.res$U[,1,drop=FALSE]*row.w)*lambda.shrinked,svd.res$V[,1,drop=FALSE])
+     else fittedX=tcrossprod(t(t(svd.res$U[,1:ncp]*row.w)*lambda.shrinked),svd.res$V[,1:ncp])
+     fittedX <- fittedX/row.w
 
-	 diff <- Xhat-recon
+	 diff <- Xhat-fittedX
 	 diff[missing] <- 0
-     objective <- sum(sweep(diff^2,1,row.w,FUN="*"))
+     objective <- sum(diff^2*row.w)
      criterion <- abs(1 - objective/old)
      old <- objective
      nb.iter <- nb.iter + 1
@@ -186,14 +186,14 @@ find.category <- function (X,tabdisj){
 		else aux.base <- Xhat[,(cumsum(group.mod)[g-1]+1):cumsum(group.mod)[g],drop=FALSE]
 		aux.base <- aux.base*ponderation[g]
         if (type[g] == "s") {
-		  aux.base <- sweep(aux.base,2,ET[[g]],FUN="*")
-		  aux.base <- sweep(aux.base,2,MM[[g]],FUN="+")
+		  aux.base <- t(t(aux.base)*ET[[g]])
+		  aux.base <- t(t(aux.base)+MM[[g]])
         }
         if (type[g] == "c")  aux.base <- sweep(aux.base,2,MM[[g]],FUN="+")
         if (type[g] == "n") {
-          tab.disj = sweep(aux.base,2,sqrt(MM[[g]]),FUN="/") + matrix(1,nrow(aux.base),ncol(aux.base)) 
+          tab.disj = t(t(aux.base)/sqrt(MM[[g]])) + matrix(1,nrow(aux.base),ncol(aux.base)) 
 ##          aux.base = sweep(sweep(tab.disj,1,row.w,FUN="*"),2,apply(tab.disj.comp[[g]],2,sum),FUN="*")
-          aux.base = sweep(tab.disj,2,apply(tab.disj.comp[[g]],2,moy.p,row.w),FUN="*")
+          aux.base = t(t(tab.disj)*apply(tab.disj.comp[[g]],2,moy.p,row.w))
 		  }
 		if (g==1) Xhat[,1:group.mod[1]] <- aux.base
 		else Xhat[,(cumsum(group.mod)[g-1]+1):cumsum(group.mod)[g]] <- aux.base
@@ -218,9 +218,9 @@ find.category <- function (X,tabdisj){
   if (!any(is.na(X))) stop("no missing values in X, this function is not useful. Perform MFA on X.")
   res.impute <- impute(X, group=group,ncp=ncp, type=type, method=method, threshold = threshold,seed=seed,maxiter=maxiter,row.w=row.w,coeff.ridge=coeff.ridge)
 return(res.impute)
-#  if (mean((res.impute$recon[!is.na(X)]-X[!is.na(X)])^2) < obj){
+#  if (mean((res.impute$fittedX[!is.na(X)]-X[!is.na(X)])^2) < obj){
 #    res <- res.impute
-#    obj <- mean((res.impute$recon[!is.na(X)]-X[!is.na(X)])^2)
+#    obj <- mean((res.impute$fittedX[!is.na(X)]-X[!is.na(X)])^2)
 #  }
 # }
 #return(res)

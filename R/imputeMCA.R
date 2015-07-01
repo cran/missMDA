@@ -9,10 +9,13 @@ find.category <- function (X,tabdisj){
   nbdummy[is.quali] <- unlist(lapply(X[,is.quali,drop=FALSE],nlevels))
   vec = c(0,cumsum(nbdummy))
   Xres <- X
-  for (i in is.quali) Xres[,i] <- as.factor(levels(X[,i])[apply(tabdisj[,(vec[i]+1):vec[i+1]],1,which.max)])
+    for (i in is.quali) {
+      temp <- as.factor(levels(X[, i])[apply(tabdisj[,(vec[i] + 1):vec[i + 1]], 1, which.max)])
+      Xres[,i]<-factor(temp,levels(X[,is.quali][,i]))
+    }
   return(Xres)
 }
-
+   
 tab.disjonctif.NA <- function(tab) {
   tab <- as.data.frame(tab)
   modalite.disjonctif <- function(i) {
@@ -37,6 +40,7 @@ tab.disjonctif.NA <- function(tab) {
   return(res)
 }
 
+
 ########## Debut programme principal
 method <- match.arg(method,c("Regularized","regularized","EM","em"),several.ok=T)[1]
 method <- tolower(method)
@@ -53,15 +57,16 @@ continue <- TRUE
 nbiter <- 0
 
 while (continue){
-  nbiter=nbiter+1
+
+  nbiter <- nbiter+1
   M <- apply(tab.disj.comp, 2, moy.p,row.w)/ncol(don)
   if (any(M<0)) stop(paste("The algorithm fails to converge. Choose a number of components (ncp) less or equal than ",ncp-1," or a number of iterations (maxiter) less or equal than ",maxiter-1,sep=""))
 
-  Z <- sweep(tab.disj.comp, 2, apply(tab.disj.comp, 2, moy.p,row.w), FUN = "/")
-  Z <- sweep(Z, 2,apply(Z,2,moy.p,row.w),FUN="-")
-  Zscale <- sweep(Z,2,sqrt(M),FUN="*")
+  Z <- t(t(tab.disj.comp)/apply(tab.disj.comp, 2, moy.p,row.w))
+  Z <- t(t(Z)-apply(Z,2,moy.p,row.w))
+  Zscale <- t(t(Z)*sqrt(M))
 
-  svd.Zscale <- svd.triplet(Zscale,row.w=row.w)
+  svd.Zscale <- svd.triplet(Zscale,row.w=row.w,ncp=ncp)
   moyeig <- 0
   if (nrow(don)>(ncol(Zscale)-ncol(don))) moyeig <- mean(svd.Zscale$vs[-c(1:ncp,(ncol(Zscale)-ncol(don)+1):ncol(Zscale))]^2)
   else moyeig <- mean(svd.Zscale$vs[-c(1:ncp)]^2)
@@ -70,19 +75,20 @@ while (continue){
   eig.shrunk <- ((svd.Zscale$vs[1:ncp]^2-moyeig)/svd.Zscale$vs[1:ncp])
 
   if (ncp==1) rec <- tcrossprod(svd.Zscale$U[,1]*eig.shrunk,svd.Zscale$V[,1])
-  else rec <- tcrossprod(sweep(svd.Zscale$U[,1:ncp],2,eig.shrunk,FUN="*"),svd.Zscale$V[,1:ncp])
+  else rec <- tcrossprod(t(t(svd.Zscale$U[,1:ncp,drop=FALSE])*eig.shrunk),svd.Zscale$V[,1:ncp,drop=FALSE])
         
-  tab.disj.rec <- sweep(rec,2,sqrt(M),FUN="/") + matrix(1,nrow(rec),ncol(rec)) 
-  tab.disj.rec <- sweep(tab.disj.rec,2,apply(tab.disj.comp,2,moy.p,row.w),FUN="*")
+  tab.disj.rec <- t(t(rec)/sqrt(M)) + matrix(1,nrow(rec),ncol(rec)) 
+  tab.disj.rec <- t(t(tab.disj.rec)*apply(tab.disj.comp,2,moy.p,row.w))
 
   diff <- tab.disj.rec - tab.disj.rec.old
   diff[hidden] <- 0
-  relch <- sum(sweep(diff^2,1,row.w,FUN="*"))
+  relch <- sum(diff^2*row.w)
   tab.disj.rec.old <- tab.disj.rec
   tab.disj.comp[hidden] <- tab.disj.rec[hidden]
   continue=(relch > threshold)&(nbiter<maxiter)
 }
 tab <- find.category(don,tab.disj.comp)
+
 return(list(tab.disj=tab.disj.comp,completeObs = tab))
 }
 

@@ -23,7 +23,7 @@ Impute the missing entries of a categorical data using the iterative MCA algorit
 of dummy variables. Then, in the initialization step, missing values are imputed with initial values such as the proportion of the category for each category using the non-missing entries. This imputation corresponds also to using the algorithm with ncp=0 and is sometimes called in the literature the "missing fuzzy average method". If the argument seed is set to a specific value, a random initialization is performed: random values are drawn in such a way that the constraint that the sum of the entries corresponding to one individual and one variable is equal to one in the indicator matrix of dummy variables. 
 The second step of the (regularized) iterative MCA algorithm consists in performing MCA on the completed dataset. Then, it imputes the missing values with the (regularized) reconstruction formulae of order ncp (the fitted matrix computed with ncp components for the (regularized) scores and loadings). These steps of estimation of the parameters via MCA and imputation of the missing values using the (regularized) fitted matrix are iterate until convergence. \cr
 We advice to use the regularized version of the algorithm to avoid the overfitting problems which are very frequent when there are many missing values. In the regularized algorithm, the singular values of the MCA are shrinked. \cr
-The number of components ncp used in the algorithm can be selected using the function estim_ncpMCA. A small number of components can also be seen as a way to regularize more and consequently may be advices to get more stable predictions.
+The number of components ncp used in the algorithm can be selected using the function ncpMCA. A small number of components can also be seen as a way to regularize more and consequently may be advices to get more stable predictions.
 \cr
 The output of the algorithm can be used as an input of the MCA function of the FactoMineR package in order to perform MCA on an incomplete dataset.
 
@@ -50,13 +50,13 @@ Francois Husson  \email{husson@agrocampus-ouest.fr} and Julie Josse  \email{Juli
 data(vnf)
 ## First the number of components has to be chosen 
 ##   (for the reconstruction step)
-## nb <- estim_ncpMCA(vnf,ncp.max=5) ## Time-consuming, nb = 4
+## nb <- ncpMCA(vnf,ncp.max=5) ## Time-consuming, nb = 4
 
 ## Impute the indicator matrix and perform a MCA
 res.impute <- imputeMCA(vnf, ncp=4)
 
 ## The imputed indicator matrix can be used as an input of the MCA function of the
-## FactoMineR package to perform the MCA on the incomplete data ozone 
+## FactoMineR package to perform the MCA on the incomplete data vnf 
 res.mca <- MCA(vnf,tab.disj=res.impute$tab.disj) 
 
 ## With supplementary variables (var 11 to 14), impute the active ones
