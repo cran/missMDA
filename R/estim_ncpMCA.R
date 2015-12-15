@@ -42,6 +42,7 @@ vrai.tab=tab.disjonctif.NA(don)
 
 if (method.cv=="kfold"){
 res = matrix(NA,ncp.max-ncp.min+1,nbsim)
+pb <- txtProgressBar(min=1/nbsim*100, max=100,style=3)
 
 for (sim in 1:nbsim){
  donNA <- as.matrix(don)
@@ -51,7 +52,9 @@ for (sim in 1:nbsim){
   tab.disj.comp <- imputeMCA(as.data.frame(donNA),ncp=nbaxes,method=method,threshold=threshold)$tab.disj
   if (sum(is.na(donNA))!=sum(is.na(don))) res[nbaxes-ncp.min+1,sim] <- sum((tab.disj.comp-vrai.tab)^2,na.rm=TRUE)/(sum(is.na(tab.disjonctif.NA(donNA)))-sum(is.na(tab.disjonctif.NA(don))))
  }
+ setTxtProgressBar(pb, sim/nbsim*100)
 }
+close(pb)
 crit=apply(res,1,mean,na.rm=TRUE)
  names(crit) <- c(ncp.min:ncp.max)
 result = list(ncp = as.integer(which.min(crit)+ncp.min-1),criterion=crit)
@@ -59,6 +62,7 @@ return(result)
 }
 
 if (method.cv=="loo"){
+  pb <- txtProgressBar(min = 0, max = 100, style = 3)
 crit <- NULL
 tab.disj.hat <- vrai.tab
 col.in.indicator <- c(0,sapply(don,nlevels))
@@ -71,9 +75,12 @@ col.in.indicator <- c(0,sapply(don,nlevels))
        for (k in 1:ncol(donNA)) donNA[,k]=as.factor(as.character(donNA[,k]))
        tab.disj.hat[i,(cumsum(col.in.indicator)[j]+1):(cumsum(col.in.indicator)[j+1])] <- imputeMCA(as.data.frame(donNA),ncp=nbaxes,method=method,threshold=threshold)$tab.disj[i,(cumsum(col.in.indicator)[j]+1):(cumsum(col.in.indicator)[j+1])]
  }
-}}
+}
+    setTxtProgressBar(pb, round((((1:length(ncp.min:ncp.max))[which(nbaxes==(ncp.min:ncp.max))]-1)*nrow(don)+i)/(length(ncp.min:ncp.max)*nrow(don))*100))  
+   }
 crit <- c(crit,mean((tab.disj.hat-vrai.tab)^2,na.rm=TRUE))
 }
+  close(pb)
 names(crit) <- c(ncp.min:ncp.max)
 return(list(ncp = as.integer(which.min(crit)+ncp.min-1),criterion=crit))
 }

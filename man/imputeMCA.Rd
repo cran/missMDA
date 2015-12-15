@@ -50,7 +50,7 @@ Francois Husson  \email{husson@agrocampus-ouest.fr} and Julie Josse  \email{Juli
 data(vnf)
 ## First the number of components has to be chosen 
 ##   (for the reconstruction step)
-## nb <- ncpMCA(vnf,ncp.max=5) ## Time-consuming, nb = 4
+## nb <- estim_ncpMCA(vnf,ncp.max=5) ## Time-consuming, nb = 4
 
 ## Impute the indicator matrix and perform a MCA
 res.impute <- imputeMCA(vnf, ncp=4)

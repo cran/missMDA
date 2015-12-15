@@ -43,7 +43,7 @@ The output of the algorithm can be used as an input of the PCA function of the F
 data(orange)
 ## First the number of components has to be chosen 
 ##   (for the imputation step)
-## nb <- ncpPCA(orange,ncp.max=5) ## Time consuming, nb = 2
+## nb <- estim_ncpPCA(orange,ncp.max=5) ## Time consuming, nb = 2
 
 ## Imputation
 res.comp <- imputePCA(orange,ncp=2)

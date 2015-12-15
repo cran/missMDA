@@ -76,8 +76,10 @@ if (orthogonal) {
   res.procrustes <- reference$ind$coord[,1:ncp]
   res.dim <- as.matrix(res$res.imputePCA)
 
-for (i in 1:dim(res$res.MI)[3]){
- rec.pca <- res$res.MI[,,i]
+##for (i in 1:dim(res$res.MI)[3]){
+## rec.pca <- res$res.MI[,,i]
+for (i in 1:length(res$res.MI)){
+ rec.pca <- res$res.MI[[i]]
  acpfin <- PCA(rec.pca, scale.unit=res$call$scale,graph=FALSE,ncp=ncp)
 
  tourne <- procrustes(acpfin$ind$coord[,1:ncp], reference$ind$coord[,1:ncp],orthogonal = TRUE, translate = TRUE, magnify = TRUE)$rmat

@@ -20,8 +20,6 @@ estim_ncpMCA(don, ncp.min=0, ncp.max=5,  method = c("Regularized","EM"),
 \details{
 For leave-one-out cross-validation (method.cv="loo"), each cell of the data matrix is alternatively removed and predicted with a MCA model using ncp.min to ncp.max dimensions. The number of components which leads to the smallest mean square error of prediction (MSEP) is retained.
 For the Kfold cross-validation (method.cv="Kfold"), pNA percentage of missing values is inserted at random in the data matrix and predicted with a MCA model using ncp.min to ncp.max dimensions. This process is repeated nbsim times.  The number of components which leads to the smallest MSEP is retained. More precisely, for both cross-validation methods, the missing entries are predicted using the imputeMCA function, it means using it means using the regularized iterative MCA algorithm (method="Regularized") or the iterative MCA algorithm (method="EM"). The regularized version is more appropriate to avoid overfitting issues.
-The cross-validation strategy is time-consuming. A less computationally greedy method consists in using the generalised cross-validation criterion (method.cv="gcv").
-
 }
 \value{
   \item{ncp}{the number of components retained for the MCA}

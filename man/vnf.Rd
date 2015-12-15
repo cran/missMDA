@@ -13,7 +13,7 @@ A user satisfaction survey of pleasure craft operators on the ``Canal des Deux M
 A data frame with 1232 observations on 14 categorical variables.
 }
 
-\references{Josse, J., Chavent, M., Liquet, B. and Husson, F. (2010). Handling missing values with Regularized Iterative Multiple Correspondence Analysis, Journal of Clcassification, 29 (1), pp. 91-116.}
+\references{Josse, J., Chavent, M., Liquet, B. and Husson, F. (2010). Handling missing values with Regularized Iterative Multiple Correspondence Analysis, Journal of Classification, 29 (1), pp. 91-116.}
 
 \examples{
 data(vnf)

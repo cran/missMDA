@@ -33,6 +33,7 @@ crit <- NULL
 }
 
 if (method.cv=="loo"){
+  pb <- txtProgressBar(min = 0, max = 100, style = 3)
  for (nbaxes in ncp.min:ncp.max){
    Xhat <- X
    for (i in 1:nrow(X)){
@@ -44,15 +45,18 @@ if (method.cv=="loo"){
       else Xhat[i,j] <- imputePCA(XNA,ncp=nbaxes,threshold=threshold,method=method,scale=scale)$completeObs[i,j]
     }
    }
+    setTxtProgressBar(pb, round((((1:length(ncp.min:ncp.max))[which(nbaxes==(ncp.min:ncp.max))]-1)*nrow(X)+i)/(length(ncp.min:ncp.max)*nrow(X))*100))  
   }
   res <- c(res,mean((Xhat-X)^2,na.rm=TRUE))
  }
+  close(pb)
  names(res) <- c(ncp.min:ncp.max)
  result = list(ncp = as.integer(which.min(res)+ncp.min-1),criterion=res)
 }
 
 if (method.cv=="kfold"){
   res <- matrix(NA,ncp.max-ncp.min+1,nbsim)
+  pb <- txtProgressBar(min=1/nbsim*100, max=100,style=3)
   for (sim in 1:nbsim){
    XNA <- as.matrix(X)
    XNA[sample(1:(nrow(XNA)*ncol(XNA)),round(pNA*nrow(XNA)*ncol(XNA),0))] <- NA
@@ -63,7 +67,9 @@ if (method.cv=="kfold"){
     } else Xhat <- imputePCA(XNA,ncp=nbaxes,threshold=threshold,method=method,scale=scale)$completeObs  
    res[nbaxes-ncp.min+1,sim] <- sum((Xhat-X)^2,na.rm=TRUE)
   }
+   setTxtProgressBar(pb, sim/nbsim*100)
  }
+  close(pb)
  resu <- apply(res,1,mean)
  names(resu) <- c(ncp.min:ncp.max)
 result <- list(ncp = as.integer(which.min(resu)+ncp.min-1),criterion=resu)
