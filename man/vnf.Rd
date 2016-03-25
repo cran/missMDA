@@ -16,8 +16,11 @@ A data frame with 1232 observations on 14 categorical variables.
 \references{Josse, J., Chavent, M., Liquet, B. and Husson, F. (2010). Handling missing values with Regularized Iterative Multiple Correspondence Analysis, Journal of Classification, 29 (1), pp. 91-116.}
 
 \examples{
+\dontrun{
 data(vnf)
 tab.disj.impute <- imputeMCA(vnf, ncp=4)$tab.disj
+require(FactoMineR)
 res.mca <- MCA(vnf,tab.disj=tab.disj.impute)
+}
 }
 \keyword{datasets}

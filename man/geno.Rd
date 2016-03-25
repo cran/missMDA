@@ -20,10 +20,11 @@ Royo C, Rodriguez A, Romagosa I (1993). Differential adaptation of complete and 
 triticale. Plant Breeding, 111, 113- 119.}
 
 \examples{
+\dontrun{
 data(geno)
-
 ncomp <- estim_ncpPCA(geno)
 res.imp <- imputePCA(geno, ncp= ncomp$ncp)
 res.pca <- PCA(res.imp$completeObs)
+}
 }
 \keyword{datasets}

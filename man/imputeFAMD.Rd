@@ -41,11 +41,13 @@ The output of the algorithm can be used as an input of the FAMD function of the 
 
 \seealso{\code{\link{imputePCA}}}
 \examples{
+\dontrun{
 data(ozone)
 res.impute <- imputeFAMD(ozone, ncp=3) 
 ## The output can be used as an input of the FAMD function of the FactoMineR package 
 ##to perform the FAMD on the incomplete data ozone 
 res.afdm <- FAMD(ozone,tab.comp=res.impute$tab.disj) 
+}
 }
 \keyword{models}
 \keyword{multivariate}

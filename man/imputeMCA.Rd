@@ -47,6 +47,7 @@ Francois Husson  \email{husson@agrocampus-ouest.fr} and Julie Josse  \email{Juli
 
 
 \examples{
+\dontrun{
 data(vnf)
 ## First the number of components has to be chosen 
 ##   (for the reconstruction step)
@@ -62,6 +63,7 @@ res.mca <- MCA(vnf,tab.disj=res.impute$tab.disj)
 ## With supplementary variables (var 11 to 14), impute the active ones
 res.impute <- imputeMCA(vnf[,1:10], ncp=4)
 res.mca <- MCA(vnf,tab.disj=res.impute$tab.disj,quali.sup=11:14) 
+}
 }
 \keyword{models}
 \keyword{multivariate}

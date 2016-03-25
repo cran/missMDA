@@ -45,12 +45,13 @@ The output of the algorithm can be used as an input of the MFA function of the F
 
 \seealso{\code{\link{imputePCA}}}
 \examples{
+\dontrun{
 data(orange)
 ## Impute the data and perform a MFA
 ## with groups of continuous variables only
 res.impute <- imputeMFA(orange, group=c(5,3), type=rep("s",2),ncp=2) 
 res.mfa <- MFA(res.impute$completeObs,group=c(5,3),type=rep("s",2)) 
-
+}
 \dontrun{
 data(vnf)
 ## Impute the indicator matrix and perform a MFA 

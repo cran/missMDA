@@ -17,8 +17,11 @@ Cornillon, P.-A., Guyader, A., Husson, F., Jégou, N., Josse, J., Kloareg, M., Ma
 }
 
 \examples{
+\dontrun{
 data(ozone)
 res.comp <- imputeFAMD(ozone, ncp=3)
+require(FactoMineR)
 res.afdm <- FAMD(ozone,tab.comp=res.comp$tab.disj)
+}
 }
 \keyword{datasets}

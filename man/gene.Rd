@@ -19,6 +19,7 @@ A data-frame with 53 rows and 432 continuous variables}
 de Tayrac M, Lê S, Aubry M, Mosser J, Husson F. (2009). Simultaneous analysis of distinct Omics data sets with integration of biological knowledge: Multiple Factor Analysis approach. BMC Genomics, 10.}
 
 \examples{
+\dontrun{
 data(gene)
 res.impute <- imputeMFA(gene[,-1], group = c(76,356), 
     type = rep("s",2), ncp = 2) 
@@ -30,5 +31,6 @@ plot(res.mfa, habillage = "group", invisible = "ind", partial = "all")
 plot(res.mfa, habillage = "group", lab.ind = FALSE, partial = "all")
 plot(res.mfa, choix = "var", habillage = "group", lab.var = FALSE)
 plot(res.mfa, choix = "group", habillage = "group")
+}
 }
 \keyword{datasets}

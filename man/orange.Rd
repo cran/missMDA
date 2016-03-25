@@ -22,10 +22,11 @@ Francois Husson, Agrocampus Rennes
 }
 
 \examples{
-data(orange)
 \dontrun{
+data(orange)
 nb <- estim_ncpPCA(orange,ncp.min=0,ncp.max=5,method.cv="Kfold",nbsim=20,pNA=0.05)
 res.comp <- imputePCA(orange,ncp=nb$ncp)
+require(FactoMineR)
 res.pca <- PCA(res.comp$completeObs)
 resMI <- MIPCA(orange,ncp=nb$ncp)
 plot(resMI)

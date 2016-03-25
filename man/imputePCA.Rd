@@ -40,6 +40,7 @@ The output of the algorithm can be used as an input of the PCA function of the F
 \seealso{\code{\link{estim_ncpPCA}}, \code{\link{MIPCA}},\cr
 \href{https://www.youtube.com/watch?v=YDbx2pk9xNY&list=PLnZgp6epRBbQzxFnQrcxg09kRt-PA66T_&index=2}{Video showing how to perform PCA on an incomplete dataset}}
 \examples{
+\dontrun{
 data(orange)
 ## First the number of components has to be chosen 
 ##   (for the imputation step)
@@ -50,6 +51,7 @@ res.comp <- imputePCA(orange,ncp=2)
 
 ## A PCA can be performed on the imputed data 
 res.pca <- PCA(res.comp$completeObs)
+}
 }
 \keyword{models}
 \keyword{multivariate}

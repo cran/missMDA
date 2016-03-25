@@ -17,8 +17,11 @@ Cornillon, P.-A., Guyader, A., Husson, F., Jegou, N., Josse, J., Kloareg, M., Ma
 }
 
 \examples{
+\dontrun{
 data(snorena)
 res.comp <- imputeFAMD(snorena, ncp=3)
+require(FactoMineR)
 res.afdm <- FAMD(snorena, tab.comp = res.comp$tab.disj)
+}
 }
 \keyword{datasets}
