@@ -46,6 +46,7 @@ data(ozone)
 res.impute <- imputeFAMD(ozone, ncp=3) 
 ## The output can be used as an input of the FAMD function of the FactoMineR package 
 ##to perform the FAMD on the incomplete data ozone 
+require(FactoMineR)
 res.afdm <- FAMD(ozone,tab.comp=res.impute$tab.disj) 
 }
 }

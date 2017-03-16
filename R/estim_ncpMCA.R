@@ -1,4 +1,4 @@
-estim_ncpMCA <- function(don,ncp.min=0,ncp.max=5,method=c("Regularized","EM"),method.cv=c("Kfold","loo"),nbsim=100,pNA=0.05,threshold=1e-4){
+estim_ncpMCA <- function(don,ncp.min=0,ncp.max=5,method=c("Regularized","EM"),method.cv=c("Kfold","loo"),nbsim=100,pNA=0.05,threshold=1e-4,verbose=TRUE){
 
 #### Debut tab.disjonctif.NA
 tab.disjonctif.NA<-function (tab) {
@@ -28,6 +28,16 @@ tab.disjonctif.NA<-function (tab) {
 }
 #### Fin tab.disjonctif.NA
 
+  prodna<-function (x, noNA){
+    n <- nrow(x)
+    p <- ncol(x)
+    NAloc <- rep(FALSE, n * p)
+    NAloc[sample(n * p, floor(n * p * noNA))] <- TRUE
+    x[matrix(NAloc, nrow = n, ncol = p)] <- NA
+    return(x)
+  }
+  
+
 ########## Debut programme principal
 
   method <- match.arg(method,c("Regularized","regularized","EM","em"),several.ok=T)[1]
@@ -42,19 +52,24 @@ vrai.tab=tab.disjonctif.NA(don)
 
 if (method.cv=="kfold"){
 res = matrix(NA,ncp.max-ncp.min+1,nbsim)
-pb <- txtProgressBar(min=1/nbsim*100, max=100,style=3)
+if(verbose) pb <- txtProgressBar(min=1/nbsim*100, max=100,style=3)
 
 for (sim in 1:nbsim){
- donNA <- as.matrix(don)
- donNA[sample(1:(nrow(donNA)*ncol(donNA)),round(pNA*nrow(donNA)*ncol(donNA),0))] <- NA
- for (i in 1:ncol(don)) donNA[,i]=as.factor(as.character(donNA[,i]))
+ continue<-TRUE
+ while(continue){
+   # donNA <- as.matrix(don)
+   # donNA[sample(1:(nrow(donNA) * ncol(donNA)), round(pNA * nrow(donNA) * ncol(donNA), 0))] <- NA
+    donNA <- prodna(don, pNA)
+    continue<- (sum(unlist(sapply(as.data.frame(donNA),nlevels)))!=sum(unlist(sapply(don,nlevels))))
+   }
+   for (i in 1:ncol(don)) donNA[,i]=as.factor(as.character(donNA[,i]))
  for (nbaxes in ncp.min:ncp.max){
   tab.disj.comp <- imputeMCA(as.data.frame(donNA),ncp=nbaxes,method=method,threshold=threshold)$tab.disj
   if (sum(is.na(donNA))!=sum(is.na(don))) res[nbaxes-ncp.min+1,sim] <- sum((tab.disj.comp-vrai.tab)^2,na.rm=TRUE)/(sum(is.na(tab.disjonctif.NA(donNA)))-sum(is.na(tab.disjonctif.NA(don))))
  }
- setTxtProgressBar(pb, sim/nbsim*100)
+ if(verbose) setTxtProgressBar(pb, sim/nbsim*100)
 }
-close(pb)
+if(verbose) close(pb)
 crit=apply(res,1,mean,na.rm=TRUE)
  names(crit) <- c(ncp.min:ncp.max)
 result = list(ncp = as.integer(which.min(crit)+ncp.min-1),criterion=crit)
@@ -62,7 +77,7 @@ return(result)
 }
 
 if (method.cv=="loo"){
-  pb <- txtProgressBar(min = 0, max = 100, style = 3)
+  if(verbose) pb <- txtProgressBar(min = 0, max = 100, style = 3)
 crit <- NULL
 tab.disj.hat <- vrai.tab
 col.in.indicator <- c(0,sapply(don,nlevels))
@@ -72,15 +87,17 @@ col.in.indicator <- c(0,sapply(don,nlevels))
      if (!is.na(don[i,j])){
        donNA <- as.matrix(don)
        donNA[i,j] <- NA
-       for (k in 1:ncol(donNA)) donNA[,k]=as.factor(as.character(donNA[,k]))
-       tab.disj.hat[i,(cumsum(col.in.indicator)[j]+1):(cumsum(col.in.indicator)[j+1])] <- imputeMCA(as.data.frame(donNA),ncp=nbaxes,method=method,threshold=threshold)$tab.disj[i,(cumsum(col.in.indicator)[j]+1):(cumsum(col.in.indicator)[j+1])]
+       if(!any(unlist(sapply(as.data.frame(donNA),summary))==0)){
+	     for (k in 1:ncol(donNA)) donNA[,k]=as.factor(as.character(donNA[,k]))
+         tab.disj.hat[i,(cumsum(col.in.indicator)[j]+1):(cumsum(col.in.indicator)[j+1])] <- imputeMCA(as.data.frame(donNA),ncp=nbaxes,method=method,threshold=threshold)$tab.disj[i,(cumsum(col.in.indicator)[j]+1):(cumsum(col.in.indicator)[j+1])]
+	   }
  }
 }
-    setTxtProgressBar(pb, round((((1:length(ncp.min:ncp.max))[which(nbaxes==(ncp.min:ncp.max))]-1)*nrow(don)+i)/(length(ncp.min:ncp.max)*nrow(don))*100))  
+    if(verbose) setTxtProgressBar(pb, round((((1:length(ncp.min:ncp.max))[which(nbaxes==(ncp.min:ncp.max))]-1)*nrow(don)+i)/(length(ncp.min:ncp.max)*nrow(don))*100))  
    }
 crit <- c(crit,mean((tab.disj.hat-vrai.tab)^2,na.rm=TRUE))
 }
-  close(pb)
+  if(verbose) close(pb)
 names(crit) <- c(ncp.min:ncp.max)
 return(list(ncp = as.integer(which.min(crit)+ncp.min-1),criterion=crit))
 }

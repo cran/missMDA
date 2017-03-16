@@ -5,7 +5,7 @@
 \usage{
 estim_ncpPCA(X, ncp.min = 0, ncp.max = 5, method = c("Regularized","EM"), 
        scale = TRUE, method.cv = c("gcv","loo","Kfold"), nbsim = 100, 
-	   pNA = 0.05, threshold=1e-4)
+	   pNA = 0.05, threshold=1e-4, verbose = TRUE)
 }
 \arguments{
   \item{X}{a data.frame with continuous variables; with missing entries or not}
@@ -17,6 +17,7 @@ estim_ncpPCA(X, ncp.min = 0, ncp.max = 5, method = c("Regularized","EM"),
   \item{nbsim}{number of simulations, useful only if method.cv="Kfold"}
   \item{pNA}{percentage of missing values added in the data set, useful only if method.cv="Kfold"}
   \item{threshold}{the threshold for assessing convergence}
+  \item{verbose}{boolean. TRUE means that a progressbar is writtent}
 }
 
 \details{

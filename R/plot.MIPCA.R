@@ -65,7 +65,7 @@ if (orthogonal) {
 ####
   res <- x
   if (!inherits(res, "MIPCA")) stop("non convenient data")
-  ncp <- res$call$ncp
+  ncp <- max(axes)
   reference <- PCA(res$res.imputePCA,scale.unit=res$call$scale,graph=FALSE,ncp=ncp)
   rec.pca <- res$res.imputePCA
 #  rec <- reconst(reference,ncp)
@@ -120,8 +120,8 @@ if ((choice=="all")|(choice=="dim")){
 
 if ((choice=="all")|(choice=="ind.supp")){
   if ((new.plot)&!nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))) dev.new()
-  oo=PCA(res.supp,ind.sup=c((nrow(res$call$X)+1):nrow(res.supp)),scale.unit=res$call$scale,graph=FALSE)
-  el=coord.ellipse(cbind.data.frame(as.factor(rep(rownames(res$call$X),res$call$nboot)),oo$ind.sup$coord[,1:2]),level.conf = level.conf) 
+  oo=PCA(res.supp,ind.sup=c((nrow(res$call$X)+1):nrow(res.supp)),scale.unit=res$call$scale,graph=FALSE,ncp=ncp)
+  el=coord.ellipse(cbind.data.frame(as.factor(rep(rownames(res$call$X),res$call$nboot)),oo$ind.sup$coord),level.conf = level.conf,axes = axes)
   if (is.null(main)) title="Supplementary projection"    
   plot(oo,axes=axes,col.ind.sup=rep(1:nrow(res$call$X),res$call$nboot),label="ind",ellipse=el,col.quali="black",
     title=title,invisible="ind.sup",new.plot=FALSE)
