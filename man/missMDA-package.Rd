@@ -5,14 +5,16 @@
 \title{Handling missing values with/in multivariate data analysis (principal component methods)
 }
 \description{
-Imputation of incomplete continuous or categorical datasets; Missing values are imputed with a principal component analysis (PCA), a multiple correspondence analysis (MCA) model or a multiple factor analysis (MFA) model; Perform multiple imputation with and in PCA
-}
+handle missing values in exploratory multivariate analysis such as principal component analysis (PCA), multiple correspondence analysis (MCA),  factor analysis for mixed data (FAMD) and multiple factor analysis (MFA)\cr
+impute missing values in continuous data sets using the PCA model, categorical data sets using MCA, mixed data using FAMD\cr
+generate multiple imputed data sets for continuous data using the PCA model and for categorical data using MCA\cr
+visualize multiple imputation in PCA and MCA}
 \details{
 \tabular{ll}{
 Package: \tab missMDA\cr
 Type: \tab Package\cr
-Version: \tab 1.7.3\cr
-Date: \tab 2014-11-26\cr
+Version: \tab 1.11\cr
+Date: \tab 2017-03-16\cr
 License: \tab GPL \cr
 LazyLoad: \tab yes\cr
 }
@@ -29,6 +31,12 @@ Josse, J. & Husson, F. (2012). Handling missing values in exploratory multivaria
 
 Julie Josse, Francois Husson (2016). missMDA: A Package for Handling Missing Values in Multivariate Data Analysis. Journal of Statistical Software, 70(1), 1-31. doi:10.18637/jss.v070.i01
   
+Audigier, V., Husson, F., and Josse, J. (2016). Multiple imputation for continuous variables using a bayesian principal component analysis. Journal of Statistical Computation and Simulation, 86(11):2140-2156.
+
+Audigier, V., Husson, F., and Josse, J. (2016). A principal component method to impute missing values for mixed data. Advances in Data Analysis and Classification, 10(1):5-26.
+
+Audigier, V., Husson, F., and Josse, J. (2017). Mimca: multiple imputation for categorical variables with multiple correspondence analysis. Statistics and Computing, 27(2):501-518.
+
 Some videos: \url{https://www.youtube.com/playlist?list=PLnZgp6epRBbQzxFnQrcxg09kRt-PA66T_}
 }
 \keyword{Factor analysis}

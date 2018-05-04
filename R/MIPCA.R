@@ -10,7 +10,7 @@ MIPCA<-function(X, ncp = 2, scale = TRUE, method = c("Regularized","EM"), thresh
       missing <- which(is.na(X))
       impute.data <- imputePCA(X, scale = scale, ncp = S, method = method, 
                                threshold = threshold)$completeObs
-      reference <- PCA(impute.data, scale.unit = scale, graph = FALSE, 
+      reference <- FactoMineR::PCA(impute.data, scale.unit = scale, graph = FALSE, 
                        ncp = S)
       rec <- reconst(reference, S)
       rec.pca <- as.matrix(X)
@@ -21,7 +21,7 @@ MIPCA<-function(X, ncp = 2, scale = TRUE, method = c("Regularized","EM"), thresh
       sigma <- sqrt((sum((resid[-missing])^2))/(nrow(X) * ncol(X) - (length(missing) + ncol(X) + S * (nrow(X) - 1 + ncol(X) - S))))
     }else{
       # without missing values
-      reference <- PCA(X, scale.unit = scale, graph = FALSE, ncp = S)
+      reference <- FactoMineR::PCA(X, scale.unit = scale, graph = FALSE, ncp = S)
       rec <- reconst(reference,ncp=S)
       rec.pca <- as.matrix(X)
       sd_resid <- apply(X, 2, sd)
@@ -68,7 +68,7 @@ MIPCA<-function(X, ncp = 2, scale = TRUE, method = c("Regularized","EM"), thresh
       #Step P
       Mean<-colMeans(X)
       X<-sweep(X,2,Mean,FUN="-")
-      res.pca<-PCA(X,ncp=ncol(X),scale.unit=F,graph=F)
+      res.pca<-FactoMineR::PCA(X,ncp=ncol(X),scale.unit=F,graph=F)
       param<-Estim_param(X=X,S=ncp)
       phi<-param[["phi"]]
       sigma<-param[["sigma"]]
@@ -85,6 +85,7 @@ MIPCA<-function(X, ncp = 2, scale = TRUE, method = c("Regularized","EM"), thresh
     return(list(res.MI=lapply(res.MI,as.data.frame),res.Over=res.Over,call=call))
   }
   
+  if (ncp==0) stop("No variability can be computed with ncp=0 dimension")
   res.Over<-list()
   method <- match.arg(method, c("Regularized", "regularized", 
                                 "EM", "em"), several.ok = T)[1]
@@ -100,7 +101,7 @@ MIPCA<-function(X, ncp = 2, scale = TRUE, method = c("Regularized","EM"), thresh
   }else if(method.mi%in%c("Boot","boot")){
     #Bootstrap 
     if(verbose){cat("Multiple Imputation using bootstrap",method,"PCA using",nboot,"imputed arrays","\n")}
-    reference <- PCA(inputeData, scale.unit = scale, graph = FALSE, 
+    reference <- FactoMineR::PCA(inputeData, scale.unit = scale, graph = FALSE, 
                      ncp = ncp)
     rec <- reconst(reference, ncp)
     rec.pca <- as.matrix(X)
@@ -123,7 +124,7 @@ MIPCA<-function(X, ncp = 2, scale = TRUE, method = c("Regularized","EM"), thresh
       resid.star[missing] <- NA
       Xstar <- rec + resid.star - matrix(mean(resid.star, na.rm = TRUE), 
                                          ncol = ncol(resid.star), nrow = nrow(resid.star))
-      acpboot <- PCA(imputePCA(Xstar, scale = scale, ncp = ncp, 
+      acpboot <- FactoMineR::PCA(imputePCA(Xstar, scale = scale, ncp = ncp, 
                                method = method, threshold = threshold)$completeObs, 
                      scale.unit = scale, ncp = ncp, graph = FALSE)
       residstar2 <- matrix(rnorm(nrow(X) * ncol(X), 0, sigma), 

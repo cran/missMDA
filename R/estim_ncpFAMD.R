@@ -45,8 +45,9 @@ estim_ncpFAMD<-function (don, ncp.min = 0, ncp.max = 5, method = c("Regularized"
   method <- tolower(method)
   method.cv <- tolower(method.cv)
   #reagencement des variables
-  jeu<-don[,c(which((lapply(don,class))=="numeric"),which((lapply(don,class))=="factor")),drop=F]
-  nbquanti<-sum((lapply(don,class))=="numeric")
+  jeu<-don[,c(which(sapply(don,is.numeric)),which(sapply(don,is.factor))),drop=F]
+  nbquanti<-sum(sapply(don,is.numeric))
+  jeu[,1:nbquanti]=lapply(jeu[,1:nbquanti,drop=FALSE],as.double)
   
   #suppression niveaux non pris
   jeu <- droplevels(jeu)

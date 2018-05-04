@@ -67,10 +67,8 @@ imputeMFA<-function (X, group, ncp = 2, type = rep("s", length(group)),
       }
       for (j in 1:ncol(X)) {
         if (!is.numeric(X[, j])) {
-          if (sum(niveau %in% levels(X[, j])) != nlevels(X[, 
-                                                           j])) 
-            levels(X[, j]) = paste(colnames(X)[j], levels(X[, 
-                                                            j]), sep = "_")
+          if (sum(niveau %in% levels(X[, j])) != nlevels(X[,j])) 
+            levels(X[, j]) = paste(colnames(X)[j], levels(X[,j]), sep = "_")
         }
       }
     }

@@ -37,7 +37,7 @@ The output of the algorithm can be used as an input of the FAMD function of the 
 \author{Francois Husson  \email{husson@agrocampus-ouest.fr} and Julie Josse  \email{Julie.Josse@agrocampus-ouest.fr}
 }
 
-\references{Audigier, V., Husson, F. & Josse, J. (2013). A principal components method to impute mixed data. Submitted arXiv:1301.4797.}
+\references{Audigier, V., Husson, F. & Josse, J. (2013). A principal components method to impute mixed data.  Advances in Data Analysis and Classification, 10(1), 5-26. https://arxiv.org/abs/1301.4797}
 
 \seealso{\code{\link{imputePCA}}}
 \examples{

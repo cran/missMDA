@@ -55,14 +55,13 @@ res = matrix(NA,ncp.max-ncp.min+1,nbsim)
 if(verbose) pb <- txtProgressBar(min=1/nbsim*100, max=100,style=3)
 
 for (sim in 1:nbsim){
- continue<-TRUE
- while(continue){
-   # donNA <- as.matrix(don)
-   # donNA[sample(1:(nrow(donNA) * ncol(donNA)), round(pNA * nrow(donNA) * ncol(donNA), 0))] <- NA
+ compteur<-1
+ while(compteur<50){
     donNA <- prodna(don, pNA)
-    continue<- (sum(unlist(sapply(as.data.frame(donNA),nlevels)))!=sum(unlist(sapply(don,nlevels))))
-   }
-   for (i in 1:ncol(don)) donNA[,i]=as.factor(as.character(donNA[,i]))
+    for (i in 1:ncol(don)) donNA[,i]=as.factor(as.character(donNA[,i]))
+    compteur <- 1+100*(sum(unlist(sapply(as.data.frame(donNA),nlevels)))==sum(unlist(sapply(don,nlevels))))
+  }
+  if (compteur<100) stop('It is too difficult to suppress some cells.\nMaybe several categories are taken by only 1 individual. You should uppress these variables or try with method.cv="loo".')
  for (nbaxes in ncp.min:ncp.max){
   tab.disj.comp <- imputeMCA(as.data.frame(donNA),ncp=nbaxes,method=method,threshold=threshold)$tab.disj
   if (sum(is.na(donNA))!=sum(is.na(don))) res[nbaxes-ncp.min+1,sim] <- sum((tab.disj.comp-vrai.tab)^2,na.rm=TRUE)/(sum(is.na(tab.disjonctif.NA(donNA)))-sum(is.na(tab.disjonctif.NA(don))))

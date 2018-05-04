@@ -83,13 +83,13 @@ plot.MIMCA<-function (x, choice = "all", axes = c(1, 2), new.plot = TRUE,
   if (!inherits(res, "MIMCA")) 
     stop("non convenient data")
   ncp <- max(axes)
-  reference <- MCA(res$call$X, graph = FALSE, ncp = ncp,tab.disj=res$res.imputeMCA)
+  reference <- FactoMineR::MCA(res$call$X, graph = FALSE, ncp = ncp,tab.disj=res$res.imputeMCA)
   res.dim  <- res$call$X
   res.procrustes <- reference$ind$coord[, 1:ncp]
   
   for (i in 1:length(res$res.MI)){
     rec.mca <- res$res.MI[[i]]
-    acmfin <- MCA(res$call$X, graph = FALSE, ncp = ncp,tab.disj = res$call$tab.disj[,,i])
+    acmfin <- FactoMineR::MCA(res$call$X, graph = FALSE, ncp = ncp,tab.disj = res$call$tab.disj[,,i])
     tourne <- procrustes(acmfin$ind$coord[, 1:ncp],
                          reference$ind$coord[,1:ncp],
                          orthogonal = TRUE, translate = TRUE,
@@ -119,7 +119,7 @@ plot.MIMCA<-function (x, choice = "all", axes = c(1, 2), new.plot = TRUE,
   if ((choice == "all") | (choice == "dim")) {
     if ((new.plot) & !nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))) {dev.new()}
     colnames(res.dim) = paste("V", 1:ncol(res.dim))
-    ooo = MCA(res.dim, quanti.sup = (ncol(res$call$X) + 1):ncol(res.dim), graph = FALSE,tab.disj = res$res.imputeMCA,ncp = ncp)
+    ooo = FactoMineR::MCA(res.dim, quanti.sup = (ncol(res$call$X) + 1):ncol(res.dim), graph = FALSE,tab.disj = res$res.imputeMCA,ncp = ncp)
     ooo$eig = reference$eig
     if (is.null(main)){title <- "Projection of the Principal Components"}
     plot(ooo, choi = "quanti.sup", axes = axes, title = title, label = "none", new.plot = FALSE)
@@ -150,7 +150,7 @@ plot.MIMCA<-function (x, choice = "all", axes = c(1, 2), new.plot = TRUE,
       dev.new()
 
     coordmodsup<-sapply(1:length(coordinsup),FUN=function(indic,coord,tabdisj,don){
-      res.mca<-MCA(res$call$X,graph=F,tab.disj = tabdisj[,,indic])
+      res.mca<-FactoMineR::MCA(res$call$X,graph=F,tab.disj = tabdisj[,,indic])
       res.out<-sapply(1:ncol(coord[[1]]),FUN=function(ii,res.mca,tabdisj,coord){
         res.out<-sqrt(1/res.mca$eig[ii,1])*diag(1/colSums(tabdisj))%*%t(tabdisj)%*%coord[,ii]
         return(res.out)},res.mca=res.mca,tabdisj=tabdisj[,,indic],coord=coord[[indic]])
