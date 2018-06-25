@@ -33,7 +33,7 @@ impute <- function (X, ncp = 4, scale=TRUE, method=NULL,threshold = 1e-6,seed = 
        et <- apply(Xhat, 2, ec,row.w)
        if (scale) Xhat <- t(t(Xhat)/et)
 
-       svd.res <- svd.triplet(Xhat,row.w=row.w,ncp=ncp)
+       svd.res <- FactoMineR::svd.triplet(Xhat,row.w=row.w,ncp=ncp)
 #       sigma2 <- mean(svd.res$vs[-(1:ncp)]^2)
 	   sigma2  <- nrow(X)*ncol(X)/min(ncol(X),nrow(X)-1)* sum((svd.res$vs[-c(1:ncp)]^2)/((nrow(X)-1) * ncol(X) - (nrow(X)-1) * ncp - ncol(X) * ncp + ncp^2))
        sigma2 <- min(sigma2*coeff.ridge,svd.res$vs[ncp+1]^2)

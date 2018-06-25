@@ -7,6 +7,7 @@ method.cv <- match.arg(method.cv,c("gcv","loo","Kfold","GCV","kfold","LOO"),seve
 
 method <- tolower(method)
 method.cv <- tolower(method.cv)
+X <- as.matrix(X)
 auxi = NULL
 for (j in 1:ncol(X)) if (!is.numeric(X[,j])) auxi = c(auxi,colnames(X)[j])
 if (!is.null(auxi)) stop(paste("\nThe following variables are not quantitative: ", auxi))

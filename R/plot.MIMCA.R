@@ -72,7 +72,7 @@ plot.MIMCA<-function (x, choice = "all", axes = c(1, 2), new.plot = TRUE,
   plot.tmp<-function(res.pca,axes,col.ind.sup,label,col.quali,ellipse,title,invisible, new.plot){
     #plot PCA pour modifier label axes
     par(col.lab="white")
-    plot.PCA(res.pca, axes = 1:2, col.ind.sup = col.ind.sup, label = label, col.quali = col.quali, ellipse = el,
+    FactoMineR::plot.PCA(res.pca, axes = 1:2, col.ind.sup = col.ind.sup, label = label, col.quali = col.quali, ellipse = el,
              title = title, invisible = invisible, new.plot = new.plot)
     par(col.lab="black")
     mtext(paste("Dim ", axes[1], " (", format(res.pca$eig[1,2], nsmall = 2, digits = 2), "%)", sep = ""), side=1, line=3)
@@ -110,7 +110,7 @@ plot.MIMCA<-function (x, choice = "all", axes = c(1, 2), new.plot = TRUE,
     title <- main
   if ((choice == "all") | (choice == "ind.proc")) {
     if (new.plot){dev.new()}
-    oo = PCA(res.procrustes, ind.sup = c((nrow(res$call$X) + 1):nrow(res.procrustes)), scale.unit = FALSE, graph = FALSE)
+    oo = FactoMineR::PCA(res.procrustes, ind.sup = c((nrow(res$call$X) + 1):nrow(res.procrustes)), scale.unit = FALSE, graph = FALSE)
     oo$eig = reference$eig
     el = coord.ellipse(cbind.data.frame(as.factor(rep(rownames(res$call$X), res$call$nboot)), oo$ind.sup$coord[, axes]), level.conf = level.conf)
     if (is.null(main)){title = "Multiple imputation using Procrustes"}
@@ -129,7 +129,7 @@ plot.MIMCA<-function (x, choice = "all", axes = c(1, 2), new.plot = TRUE,
     if ((new.plot) & !nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))) {dev.new()}
     if (is.null(main)){title = "Supplementary projection\n individuals"}
     
-    oo<-PCA(rbind(reference$ind$coord[, axes],do.call(rbind,coordinsup)[, axes]),
+    oo<-FactoMineR::PCA(rbind(reference$ind$coord[, axes],do.call(rbind,coordinsup)[, axes]),
             ind.sup = c((nrow(res$call$X) + 1):(nrow(res$call$X)*(res$call$nboot+1))), 
             scale.unit = FALSE, graph = FALSE,ncp=2)
     oo$eig = reference$eig[axes,]
@@ -159,7 +159,7 @@ plot.MIMCA<-function (x, choice = "all", axes = c(1, 2), new.plot = TRUE,
     
     if (is.null(main)){title <- "Supplementary projection\ncategories"}
     
-    oo<-PCA(rbind(reference$var$coord[, axes],do.call(rbind,coordmodsup)[,axes]),
+    oo<-FactoMineR::PCA(rbind(reference$var$coord[, axes],do.call(rbind,coordmodsup)[,axes]),
             ind.sup = c((nrow(reference$var$coord) + 1):(nrow(reference$var$coord)*(res$call$nboot+1))), 
             scale.unit = FALSE, graph = FALSE)
     oo$eig = reference$eig[axes,]

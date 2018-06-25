@@ -4,8 +4,14 @@ imputeMultilevel <- function(X, ifac=1, ncpB = 2, ncpW = 2, method  = c("Regular
 find.category <- function (X,tabdisj){
   # X matrix of categoriccal variables
   # tabdisj fuzzy disjunctive table of the categorical variables
-  if (ncol(X)>1) nbdummy <- unlist(lapply(X,nlevels))
-  else nbdummy <- nlevels(X[,1,drop=FALSE])
+  nbdummy <- NULL
+  if (ncol(X)>1){
+     for (i in 1:ncol(X)) nbdummy <- c(nbdummy,nlevels(X[,i]))
+  } else {
+    nbdummy <- nlevels(X[,1])
+  }
+#  if (ncol(X)>1) nbdummy <- unlist(lapply(X,nlevels))
+#  else nbdummy <- nlevels(X[,1,drop=FALSE])
   vec = c(0,cumsum(nbdummy))
   for (i in 1:ncol(X)) {
     temp <- as.factor(levels(X[, i])[apply(tabdisj[,(vec[i] + 1):vec[i + 1]], 1, which.max)])
@@ -51,8 +57,8 @@ ec <- function(V, poids) {
   if (is.null(row.w)) {row.w = rep(1, nrow(X))/nrow(X)} # Weights useful for bootstrap. If no bootstrap they are set to 1/n.
   if (any(is.na(X[,ifac]))){
     warning("Rows with missing valued on the group variables are dropped")
-	X = X[!is.na(X[,ifac]),] # Remove rows where group membership is missing
 	row.w = row.w[!is.na(X[,ifac])] # Remove rows where group membership is missing
+	X = X[!is.na(X[,ifac]),] # Remove rows where group membership is missing
   }
   if(is.null(rownames(X)))  rownames(X)=1:nrow(X)
   indexrow = rownames(X)
@@ -84,7 +90,7 @@ ec <- function(V, poids) {
   if (nb.quanti>0) QuantiAct <- as.matrix(X[,2:(1+nb.quanti),drop=FALSE]) # Data table containing all active numerical variables
   if (nb.quali>0){
     QualiAct <- as.matrix(X[,(2+nb.quanti):ncol(X),drop=FALSE]) # Table containing categorical variables
-    Z <- Zold <- tab.disjonctif.prop(QualiAct) # Fuzzy disjunctive table where missing values are replaced by proportions of categories
+    Z <- Zold <- FactoMineR::tab.disjonctif.prop(QualiAct) # Fuzzy disjunctive table where missing values are replaced by proportions of categories
     colnames(Z) <- unlist(sapply(X[,(2+nb.quanti):ncol(X),drop=FALSE], function(cc) levels(droplevels(cc))))
   }
   
@@ -152,7 +158,7 @@ ec <- function(V, poids) {
       WITHIN_global = rbind(WITHIN_global,inter) 
     }
     
-    svd.WITHIN_global <- svd.triplet(WITHIN_global,ncp=ncpW) # SVD of the Within part
+    svd.WITHIN_global <- FactoMineR::svd.triplet(WITHIN_global,ncp=ncpW) # SVD of the Within part
     moyeigG <- mean(svd.WITHIN_global$vs[-c(1:ncpW)]^2) # Check when n<p
     if (method=="em") moyeigG <- 0
     eig.shrunkG <- ((svd.WITHIN_global$vs[1:ncpW]^2 - moyeigG)/svd.WITHIN_global$vs[1:ncpW])
@@ -194,7 +200,7 @@ ec <- function(V, poids) {
   if (nb.quali>0){
     Xhat[, (nb.quanti+1):ncol(Xhat)] <- t(t(Xhat[, (nb.quanti+1):ncol(Xhat)])*sqrt(Mglobal) + Mglobal)
   }
-  
+
   completeObs = X[, 1,drop=FALSE]
   if (nb.quanti>0) completeObs <- cbind.data.frame(completeObs,Xhat[,1:ncol(QuantiAct)])  
   if (nb.quali>0) completeObs <- cbind.data.frame(completeObs,find.category(X[,(2+nb.quanti):ncol(X),drop=FALSE], Xhat[, (nb.quanti+1):ncol(Xhat)]))

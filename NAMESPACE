@@ -1,5 +1,5 @@
 export(estim_ncpFAMD,estim_ncpPCA,estim_ncpMCA,imputeCA,imputeFAMD,imputeMCA,imputeMFA,imputeMultilevel,imputePCA,MIMCA,MIPCA,Overimpute,prelim,plot.MIPCA,plot.MIMCA)
-importFrom(FactoMineR,PCA,MCA,MFA,FAMD,svd.triplet,coord.ellipse,reconst,tab.disjonctif.prop,plot.PCA)
+importFrom(FactoMineR,PCA,MCA,svd.triplet,coord.ellipse,reconst,tab.disjonctif.prop,plot.PCA)
 importFrom(graphics,plot,points,abline,segments,legend,par,mtext)
 importFrom(grDevices,dev.new,heat.colors)
 importFrom(mice,as.mids)

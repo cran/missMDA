@@ -66,7 +66,7 @@ while (continue){
   Z <- t(t(Z)-apply(Z,2,moy.p,row.w))
   Zscale <- t(t(Z)*sqrt(M))
 
-  svd.Zscale <- svd.triplet(Zscale,row.w=row.w,ncp=ncp)
+  svd.Zscale <- FactoMineR::svd.triplet(Zscale,row.w=row.w,ncp=ncp)
   moyeig <- 0
   if (nrow(don)>(ncol(Zscale)-ncol(don))) moyeig <- mean(svd.Zscale$vs[-c(1:ncp,(ncol(Zscale)-ncol(don)+1):ncol(Zscale))]^2)
   else moyeig <- mean(svd.Zscale$vs[-c(1:ncp)]^2)

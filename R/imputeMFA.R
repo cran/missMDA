@@ -163,7 +163,7 @@ imputeMFA<-function (X, group, ncp = 2, type = rep("s", length(group)),
         missing <- which(is.na(as.matrix(aux.base)))
         if (any(is.na(aux.base))) 
           aux.base[missing] <- 0
-        ponderation[g] <- svd.triplet(aux.base, ncp = 1, 
+        ponderation[g] <- FactoMineR::svd.triplet(aux.base, ncp = 1, 
                                       row.w = row.w)$vs[1]
         Xhat <- cbind.data.frame(Xhat, aux.base/ponderation[g])
         if (!is.null(seed) & (length(missing) != 0)) 
@@ -177,7 +177,7 @@ imputeMFA<-function (X, group, ncp = 2, type = rep("s", length(group)),
         missing <- which(is.na(as.matrix(aux.base)))
         if (any(is.na(aux.base))) 
           aux.base[missing] <- 0
-        ponderation[g] = svd.triplet(aux.base, ncp = 1, 
+        ponderation[g] = FactoMineR::svd.triplet(aux.base, ncp = 1, 
                                      row.w = row.w)$vs[1]
         Xhat <- cbind.data.frame(Xhat, aux.base/ponderation[g])
         if (!is.null(seed) & (length(missing) != 0)) 
@@ -192,7 +192,7 @@ imputeMFA<-function (X, group, ncp = 2, type = rep("s", length(group)),
         Z = t(t(tab.disj)/apply(tab.disj, 2, moy.p, row.w))
         Z = t(t(Z) - apply(Z, 2, moy.p, row.w))
         Zscale = t(t(Z) * sqrt(MM[[g]]))
-        ponderation[g] <- svd.triplet(Zscale, row.w = row.w)$vs[1]
+        ponderation[g] <- FactoMineR::svd.triplet(Zscale, row.w = row.w)$vs[1]
         Xhat <- cbind.data.frame(Xhat, Zscale/ponderation[g])
         Xhat2 <- cbind.data.frame(Xhat2, as.data.frame(tab.disjonctif.NA(aux.base)))
       }
@@ -222,14 +222,14 @@ imputeMFA<-function (X, group, ncp = 2, type = rep("s", length(group)),
           aux.base <- t(t(aux.base) - MM[[g]])
           ET[[g]] <- apply(aux.base, 2, ec, row.w)
           aux.base <- t(t(aux.base)/ET[[g]])
-          ponderation[g] = svd.triplet(aux.base, ncp = 1, 
+          ponderation[g] = FactoMineR::svd.triplet(aux.base, ncp = 1, 
                                        row.w = row.w)$vs[1]
         }
         if (type[g] == "c") {
           aux.base <- t(t(aux.base) + MM[[g]])
           MM[[g]] <- apply(aux.base, 2, moy.p, row.w)
           aux.base <- t(t(aux.base) - MM[[g]])
-          ponderation[g] = svd.triplet(aux.base, ncp = 1, 
+          ponderation[g] = FactoMineR::svd.triplet(aux.base, ncp = 1, 
                                        row.w = row.w)$vs[1]
         }
         if (type[g] == "n") {
@@ -247,14 +247,14 @@ imputeMFA<-function (X, group, ncp = 2, type = rep("s", length(group)),
                                   row.w))
           Z = t(t(Z) - apply(Z, 2, moy.p, row.w))
           aux.base = t(t(Z) * sqrt(MM[[g]]))
-          ponderation[g] <- svd.triplet(aux.base, row.w = row.w, 
+          ponderation[g] <- FactoMineR::svd.triplet(aux.base, row.w = row.w, 
                                         ncp = 1)$vs[1]
         }
         if (g == 1) 
           Xhat[, 1:group.mod[1]] <- aux.base/ponderation[g]
         else Xhat[, (cumsum(group.mod)[g - 1] + 1):cumsum(group.mod)[g]] <- aux.base/ponderation[g]
       }
-      svd.res <- svd.triplet(Xhat, row.w = row.w, ncp = ncp)
+      svd.res <- FactoMineR::svd.triplet(Xhat, row.w = row.w, ncp = ncp)
       sigma2 <- mean(svd.res$vs[-(1:ncp)]^2)
       sigma2 <- min(sigma2 * coeff.ridge, svd.res$vs[ncp + 
                                                        1]^2)
