@@ -1,22 +1,21 @@
 Package: missMDA
 Type: Package
 Title: Handling Missing Values with Multivariate Data Analysis
-Version: 1.13
-Date: 2018-06-25
+Version: 1.14
+Date: 2019-01-23
 Author: Francois Husson, Julie Josse
 Maintainer: Francois Husson <husson@agrocampus-ouest.fr>
 Description: Imputation of incomplete continuous or categorical datasets; Missing values are imputed with a principal component analysis (PCA), a multiple correspondence analysis (MCA) model or a multiple factor analysis (MFA) model; Perform multiple imputation with and in PCA or MCA.
 Depends: R (>= 3.3.0)
-Imports: FactoMineR,graphics,grDevices,mice,mvtnorm,stats,utils
+Imports:
+        FactoMineR,graphics,grDevices,mice,mvtnorm,stats,utils,doParallel,parallel,foreach
 Suggests: knitr
 License: GPL (>= 2)
-URL:
-        http://math.agrocampus-ouest.fr/infoglueDeliverLive/membres/Francois.Husson,
-        http://juliejosse.com/
+URL: https://husson.github.io/, http://juliejosse.com/
 Encoding: latin1
 LazyLoad: yes
 VignetteBuilder: knitr
 NeedsCompilation: no
-Packaged: 2018-06-25 13:49:27 UTC; husson
+Packaged: 2019-01-23 10:12:15 UTC; husson
 Repository: CRAN
-Date/Publication: 2018-06-25 14:28:03 UTC
+Date/Publication: 2019-01-23 10:50:03 UTC

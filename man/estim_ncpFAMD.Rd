@@ -29,7 +29,7 @@ For the Kfold cross-validation (method.cv="Kfold"), pNA percentage of missing va
 }
 \references{Audigier, V., Husson, F. & Josse, J. (2014). A principal components method to impute mixed data. Advances in Data Analysis and Classification}
 
-\author{Vincent Audigier  \email{audigier@agrocampus-ouest.fr}, Francois Husson  \email{husson@agrocampus-ouest.fr} and Julie Josse  \email{Julie.Josse@agrocampus-ouest.fr}
+\author{Vincent Audigier  \email{vincent.audigier@cnam.fr}, Francois Husson  \email{husson@agrocampus-ouest.fr} and Julie Josse  \email{julie.josse@polytechnique.edu}
 }
 \seealso{\code{\link{imputeFAMD}}}
 \examples{

@@ -1,7 +1,7 @@
 imputeMultilevel <- function(X, ifac=1, ncpB = 2, ncpW = 2, method  = c("Regularized","EM"), 
       scale=TRUE, row.w=NULL, threshold=1e-4, maxiter = 1000, ...){
 					 
-find.category <- function (X,tabdisj){
+  find.category <- function (X,tabdisj){
   # X matrix of categoriccal variables
   # tabdisj fuzzy disjunctive table of the categorical variables
   nbdummy <- NULL
@@ -52,7 +52,8 @@ ec <- function(V, poids) {
   res <- sqrt(sum(V^2 * poids,na.rm=TRUE)/sum(poids[!is.na(V)]))
 }
 					 
-  method <- match.arg(method,c("Regularized","regularized","EM","em"),several.ok=T)[1]
+X <- as.data.frame(X)
+method <- match.arg(method,c("Regularized","regularized","EM","em"),several.ok=T)[1]
   method=tolower(method)	
   if (is.null(row.w)) {row.w = rep(1, nrow(X))/nrow(X)} # Weights useful for bootstrap. If no bootstrap they are set to 1/n.
   if (any(is.na(X[,ifac]))){
@@ -70,15 +71,17 @@ ec <- function(V, poids) {
   is.quanti <- which(unlist(lapply(X,is.numeric)))
   nb.quanti <- length(is.quanti)
   X <- X[,c(ifac,is.quanti,setdiff(is.quali,ifac))]
-  if (nb.quali>0) X[,(2+nb.quanti):ncol(X)] <- do.call(cbind.data.frame, lapply((2+nb.quanti):ncol(X), function(i) as.factor(X[,i])))
-  levels.number <- unlist(lapply((2+nb.quanti):ncol(X), function(i) nlevels(X[,i])))
-  levels.number.dropped <- unlist(lapply((2+nb.quanti):ncol(X), function(i) nlevels(droplevels(X)[,i])))
-  if(! all(levels.number == levels.number.dropped)){
-    X = droplevels(X)
-    warning("Empty levels dropped")
+  if (nb.quali>1){
+    X[,(2+nb.quanti):ncol(X)] <- do.call(cbind.data.frame, lapply((2+nb.quanti):ncol(X), function(i) as.factor(X[,i])))
+    levels.number <- unlist(lapply((2+nb.quanti):ncol(X), function(i) nlevels(X[,i])))
+    levels.number.dropped <- unlist(lapply((2+nb.quanti):ncol(X), function(i) nlevels(droplevels(X)[,i])))
+    if(! all(levels.number == levels.number.dropped)){
+      X = droplevels(X)
+      warning("Empty levels dropped")
+    }
+    liste.levels <- lapply(X,levels)
+    for (j in (2+nb.quanti):ncol(X)) levels(X[,j])<- sort(paste("v",j,".",1:nlevels(X[,j]),sep=""))  # In case two cat variables have the same levels
   }
-  liste.levels <- lapply(X,levels)
-  for (j in (2+nb.quanti):ncol(X)) levels(X[,j])<- sort(paste("v",j,".",1:nlevels(X[,j]),sep=""))  # In case two cat variables have the same levels
   if(ncpB > nlevels(X[, 1])-1){
     ncpB= nlevels(X[, 1])-1
     warning("Number of between components larger than number of groups. By default it was set to the number of groups minus 1.  ")
@@ -86,15 +89,15 @@ ec <- function(V, poids) {
   
   X = X[ order(X[,1]),] # Order data frame by group
   fac = X[, 1]
-  QualiAct <- QuantiAct <- NULL
+QualiAct <- QuantiAct <- NULL
   if (nb.quanti>0) QuantiAct <- as.matrix(X[,2:(1+nb.quanti),drop=FALSE]) # Data table containing all active numerical variables
-  if (nb.quali>0){
+  if (nb.quali>1){
     QualiAct <- as.matrix(X[,(2+nb.quanti):ncol(X),drop=FALSE]) # Table containing categorical variables
     Z <- Zold <- FactoMineR::tab.disjonctif.prop(QualiAct) # Fuzzy disjunctive table where missing values are replaced by proportions of categories
     colnames(Z) <- unlist(sapply(X[,(2+nb.quanti):ncol(X),drop=FALSE], function(cc) levels(droplevels(cc))))
   }
   
-  if (nb.quali>0) {indNA = is.na(cbind(QuantiAct, tab.disjonctif.NA(QualiAct)))} else {
+  if (nb.quali>1) {indNA = is.na(cbind(QuantiAct, tab.disjonctif.NA(QualiAct)))} else {
     indNA = is.na(QuantiAct)} # Indicator matrix for missingness: missing->TRUE, observed->FALSE.
   
   Xhat <- NULL
@@ -111,7 +114,7 @@ ec <- function(V, poids) {
   }
   
   # Center, scale, initialize for categorical variables
-  if (nb.quali>0){
+  if (nb.quali>1){
     Mglobal = apply(Z,2,mean) # nc/n
     Zcentered <- t(t(Z)-Mglobal)# Z - between  Z - nck/nk
     A = t(t(Zcentered)/sqrt(Mglobal)) # Zcentererd* (nck)^{-1/2}
@@ -137,7 +140,7 @@ ec <- function(V, poids) {
       }
     }
     
-    if (nb.quali>0){
+    if (nb.quali>1){
       # Quali: recompute margins
       Z <-  t(t(Xhat[, (nb.quanti+1):ncol(Xhat)])*sqrt(Mglobal) + Mglobal)
       Mglobal = apply(Z,2,mean) # nc/n
@@ -197,21 +200,21 @@ ec <- function(V, poids) {
     Xhat[,1:ncol(QuantiAct)] <- t(t(Xhat[,1:ncol(QuantiAct)])+mean.p)
   }
   # Quali recompute margins
-  if (nb.quali>0){
+  if (nb.quali>1){
     Xhat[, (nb.quanti+1):ncol(Xhat)] <- t(t(Xhat[, (nb.quanti+1):ncol(Xhat)])*sqrt(Mglobal) + Mglobal)
   }
 
   completeObs = X[, 1,drop=FALSE]
   if (nb.quanti>0) completeObs <- cbind.data.frame(completeObs,Xhat[,1:ncol(QuantiAct)])  
-  if (nb.quali>0) completeObs <- cbind.data.frame(completeObs,find.category(X[,(2+nb.quanti):ncol(X),drop=FALSE], Xhat[, (nb.quanti+1):ncol(Xhat)]))
-  colnames(completeObs)[1]=colnames(X)[1]
-  for (j in (2+nb.quanti):ncol(X)) levels(completeObs[,j]) <-  liste.levels[[j]]
+  if (nb.quali>1){
+    completeObs <- cbind.data.frame(completeObs,find.category(X[,(2+nb.quanti):ncol(X),drop=FALSE], Xhat[, (nb.quanti+1):ncol(Xhat)]))
+    colnames(completeObs)[1]=colnames(X)[1]
+    for (j in (2+nb.quanti):ncol(X)) levels(completeObs[,j]) <-  liste.levels[[j]]
+  }
   completeObs=completeObs[indexrow,indexcol]
   if(nb.iter>=maxiter){
     warning(paste("Stopped after", maxiter, "iterations"))
   }
-  return(completeObs)
+  return(list(completeObs=completeObs,Xhat=Xhat))
 }
-
-
 

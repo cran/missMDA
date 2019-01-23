@@ -29,7 +29,7 @@ The imputed contingency table; the observed values are kept for the non-missing 
 }
 
 \author{
-Francois Husson  \email{husson@agrocampus-ouest.fr} and Julie Josse  \email{Julie.Josse@agrocampus-ouest.fr}
+Francois Husson  \email{husson@agrocampus-ouest.fr} and Julie Josse  \email{julie.josse@polytechnique.edu}
 }
 
 \examples{

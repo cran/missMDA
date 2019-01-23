@@ -1,5 +1,6 @@
 imputeFAMD <- function (X, ncp = 2, method=c("Regularized","EM"),row.w=NULL,coeff.ridge=1,threshold = 1e-6,seed = NULL,maxiter=1000,...){
 
+  X <- as.data.frame(X)
   method <- match.arg(method,c("Regularized","regularized","EM","em"),several.ok=T)[1]
   method <- tolower(method)
   type = rep("s",ncol(X))

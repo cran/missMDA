@@ -53,11 +53,13 @@ imputeMFA<-function (X, group, ncp = 2, type = rep("s", length(group)),
       }
       return(Xres)
     }
+
     method <- match.arg(method, c("Regularized", "regularized", 
                                   "EM", "em"), several.ok = T)[1]
     method <- tolower(method)
     if (!is.null(seed)) 
       set.seed(seed)
+    X <- as.data.frame(X)
     X <- droplevels(X)
     if ("n" %in% type) {
       niveau = NULL

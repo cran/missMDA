@@ -42,6 +42,7 @@ MIMCA<-function(X,nboot=100,ncp,coeff.ridge=1,threshold = 1e-06, maxiter = 1000,
   }
   temp<-if(coeff.ridge==1){"regularized"}else if(coeff.ridge==0){"EM"}else{paste("coeff.ridge=",coeff.ridge)}
   if(verbose){cat("Multiple Imputation using",temp,"MCA using",nboot,"imputed arrays","\n")}
+  X <- as.data.frame(X)
   n<-nrow(X)
   Boot<-matrix(sample(1:n,size=nboot*n,replace=T),n,nboot)
   Weight<-matrix(1/(n*1000),n,nboot,dimnames=list(1:n,paste("nboot=",1:nboot,sep="")))

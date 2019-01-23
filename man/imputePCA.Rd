@@ -34,7 +34,7 @@ The output of the algorithm can be used as an input of the PCA function of the F
 
 \references{Josse, J & Husson, F. (2013). Handling missing values in exploratory multivariate data analysis methods. Journal de la SFdS. 153 (2), pp. 79-99.}
 
-\author{Francois Husson  \email{husson@agrocampus-ouest.fr} and Julie Josse  \email{Julie.Josse@agrocampus-ouest.fr}
+\author{Francois Husson  \email{husson@agrocampus-ouest.fr} and Julie Josse  \email{julie.josse@polytechnique.edu}
 }
 
 \seealso{\code{\link{estim_ncpPCA}}, \code{\link{MIPCA}},\cr

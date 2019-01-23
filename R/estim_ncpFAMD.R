@@ -39,6 +39,7 @@ estim_ncpFAMD<-function (don, ncp.min = 0, ncp.max = 5, method = c("Regularized"
   }
   
 #  if(!("numeric"%in%(lapply(don,class)) & "factor"%in%(lapply(don,class)))){stop("Your data set must contain mixed data.")}
+don <- as.data.frame(don)
   if((sum(sapply(don,is.numeric))==0) || (sum(!sapply(don,is.numeric))==0)){stop("Your data set must contain mixed data.")}
   method <- match.arg(method, c("Regularized", "regularized","EM", "em"), several.ok = T)[1]
   method.cv <- match.arg(method.cv, c("loo", "Kfold", "kfold", "LOO"), several.ok = T)[1]

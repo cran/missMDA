@@ -34,7 +34,7 @@ The output of the algorithm can be used as an input of the FAMD function of the 
   \item{call}{the matched call}
 }
 
-\author{Francois Husson  \email{husson@agrocampus-ouest.fr} and Julie Josse  \email{Julie.Josse@agrocampus-ouest.fr}
+\author{Francois Husson  \email{husson@agrocampus-ouest.fr} and Julie Josse  \email{julie.josse@polytechnique.edu}
 }
 
 \references{Audigier, V., Husson, F. & Josse, J. (2013). A principal components method to impute mixed data.  Advances in Data Analysis and Classification, 10(1), 5-26. https://arxiv.org/abs/1301.4797}

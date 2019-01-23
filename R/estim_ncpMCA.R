@@ -39,7 +39,7 @@ tab.disjonctif.NA<-function (tab) {
   
 
 ########## Debut programme principal
-
+don <- as.data.frame(don)
   method <- match.arg(method,c("Regularized","regularized","EM","em"),several.ok=T)[1]
 method.cv <- match.arg(method.cv,c("loo","Kfold","kfold","LOO"),several.ok=T)[1]
 method <- tolower(method)

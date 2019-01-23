@@ -37,8 +37,7 @@ Audigier, V. Josse, J., Husson, F. (2015). Multiple imputation for continuous va
 Little R.J.A., Rubin D.B. (2002) Statistical Analysis with Missing Data. Wiley series in probability and statistics, New-York.
 }
 
-\author{Francois Husson  \email{husson@agrocampus-ouest.fr}, Julie Josse  \email{Julie.Josse@agrocampus-ouest.fr} and Vincent Audigier \email{audigier@agrocampus-ouest.fr}
-}
+\author{Francois Husson  \email{husson@agrocampus-ouest.fr}, Julie Josse  \email{julie.josse@polytechnique.edu} and Vincent Audigier}
 
 \seealso{\code{\link{imputePCA}},\code{\link{plot.MIPCA}},\code{\link{Overimpute}},\code{\link{MIMCA}},\code{\link{with.mids}},\code{\link{pool}},\code{\link{summary.mira}}}
 \examples{

@@ -85,6 +85,7 @@ MIPCA<-function(X, ncp = 2, scale = TRUE, method = c("Regularized","EM"), thresh
     return(list(res.MI=lapply(res.MI,as.data.frame),res.Over=res.Over,call=call))
   }
   
+  X <- as.matrix(X)
   if (ncp==0) stop("No variability can be computed with ncp=0 dimension")
   res.Over<-list()
   method <- match.arg(method, c("Regularized", "regularized", 

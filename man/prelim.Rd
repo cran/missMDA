@@ -1,13 +1,13 @@
 \name{prelim}
 \alias{prelim}
-\title{Converts a dataset imputed by MIMCA or MIPCA into a mids object}
+\title{Converts a dataset imputed by MIMCA, MIPCA or MIFAMD into a mids object}
 \description{
 This function performs grouping and sorting operations on a multiply imputed dataset. It creates a mids object that is needed for input to with.mids, which allows analyse of the multiply imputed data set. The original incomplete data set needs to be available so that we know where the missing data are.}
 \usage{
 prelim(res.mi,X)
 }
 \arguments{
-  \item{res.mi}{an output of the functions MIPCA or MIMCA}
+  \item{res.mi}{an output of the functions MIPCA, MIMCA or MIFAMD}
   \item{X}{the original incomplete data set corresponding to the res.mi argument}
 }
 
@@ -15,10 +15,10 @@ prelim(res.mi,X)
 \item{imp.mids}{An object of type mids}
 }
 
-\author{Vincent Audigier \email{audigier@agrocampus-ouest.fr}, Francois Husson  \email{husson@agrocampus-ouest.fr} and Julie Josse  \email{josse@agrocampus-ouest.fr}
+\author{Vincent Audigier \email{vincent.audigier@lecnam.net}, Francois Husson  \email{husson@agrocampus-ouest.fr} and Julie Josse  \email{josse@agrocampus-ouest.fr}
 }
 
-\seealso{\code{\link{MIPCA}},\code{\link{MIMCA}},\code{\link{with.mids}},\code{\link{pool}},\code{\link{summary.mira}}}
+\seealso{\code{\link{MIFAMD}},\code{\link{MIPCA}},\code{\link{MIMCA}},\code{\link{with.mids}},\code{\link{pool}},\code{\link{summary.mira}}}
 \examples{
 \dontrun{
 data(TitanicNA)
