@@ -5,7 +5,8 @@
 \description{Impute the missing values of a categorical dataset using Multiple Correspondence Analysis (MCA). Can be used as a preliminary step before performing MCA on an incomplete dataset.}
 \usage{
 imputeMCA(don, ncp=2, method = c("Regularized","EM"), row.w=NULL, coeff.ridge=1, 
-    threshold=1e-06, seed=NULL, maxiter=1000)
+    threshold=1e-06, ind.sup = NULL, quanti.sup=NULL, quali.sup=NULL,
+	seed=NULL, maxiter=1000)
 }
 
 \arguments{
@@ -15,6 +16,9 @@ imputeMCA(don, ncp=2, method = c("Regularized","EM"), row.w=NULL, coeff.ridge=1,
   \item{row.w}{row weights  (by default, a vector of 1 for uniform row weights)}
   \item{coeff.ridge}{1 by default to perform the regularized imputeMCA algorithm; useful only if method="Regularized". Other regularization terms can be implemented by setting the value to less than 1 in order to regularized less (to get closer to the results of the EM method) or more than 1 to regularized more (to get closer to the results of the proportion imputation)}
   \item{threshold}{the threshold for assessing convergence}
+  \item{ind.sup}{a vector indicating the indexes of the supplementary individuals}
+  \item{quanti.sup}{a vector indicating the indexes of the quantitative supplementary variables}
+  \item{quali.sup}{a vector indicating the indexes of the categorical supplementary variables}
   \item{seed}{integer, by default seed = NULL implies that missing values are initially imputed by the proportion of the category for the categorical variables coded with indicator matrices of dummy variables. Other values leads to a random initialization}
   \item{maxiter}{integer, maximum number of iterations for the regularized iterative MCA algorithm}
 }
@@ -40,7 +44,8 @@ The output of the algorithm can be used as an input of the MCA function of the F
 Francois Husson  \email{husson@agrocampus-ouest.fr} and Julie Josse  \email{julie.josse@polytechnique.edu}
 }
 
-\references{Josse, J., Chavent, M., Liquet, B. and Husson, F. (2010). Handling missing values with Regularized Iterative Multiple Correspondence Analysis, Journal of Clcassification, 29 (1), pp. 91-116.}
+\references{Josse, J., Chavent, M., Liquet, B. and Husson, F. (2010). Handling missing values with Regularized Iterative Multiple Correspondence Analysis, Journal of Clcassification, 29 (1), pp. 91-116.\cr
+Josse, J. and Husson, F. missMDA (2016). A Package for Handling Missing Values in Multivariate Data Analysis. Journal of Statistical Software, 70 (1), pp 1-31 <doi:10.18637/jss.v070.i01>}
 
 \seealso{\code{\link{estim_ncpMCA}},\cr
 \href{https://www.youtube.com/watch?v=_Wa6R4PM9dY&list=PLnZgp6epRBbQzxFnQrcxg09kRt-PA66T_&index=1}{Video showing how to perform MCA on an incomplete dataset}}
@@ -67,3 +72,4 @@ res.mca <- MCA(vnf,tab.disj=res.impute$tab.disj,quali.sup=11:14)
 }
 \keyword{models}
 \keyword{multivariate}
+\keyword{imputation}

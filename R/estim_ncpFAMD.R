@@ -1,6 +1,6 @@
 estim_ncpFAMD<-function (don, ncp.min = 0, ncp.max = 5, method = c("Regularized", "EM"), 
-    method.cv = c("Kfold", "loo"), nbsim = 100, pNA = 0.05, 
-    threshold = 1e-04, verbose=TRUE) 
+    method.cv = c("Kfold", "loo"), nbsim = 100, pNA = 0.05,ind.sup=NULL,sup.var=NULL,
+	threshold = 1e-04, verbose=TRUE) 
 {
   tab.disjonctif.NA <- function(tab) {
     tab <- as.data.frame(tab)
@@ -40,6 +40,8 @@ estim_ncpFAMD<-function (don, ncp.min = 0, ncp.max = 5, method = c("Regularized"
   
 #  if(!("numeric"%in%(lapply(don,class)) & "factor"%in%(lapply(don,class)))){stop("Your data set must contain mixed data.")}
 don <- as.data.frame(don)
+if (!is.null(ind.sup)) don <- don[-ind.sup,]
+if (!is.null(sup.var)) don <- don[,-sup.var]
   if((sum(sapply(don,is.numeric))==0) || (sum(!sapply(don,is.numeric))==0)){stop("Your data set must contain mixed data.")}
   method <- match.arg(method, c("Regularized", "regularized","EM", "em"), several.ok = T)[1]
   method.cv <- match.arg(method.cv, c("loo", "Kfold", "kfold", "LOO"), several.ok = T)[1]
@@ -61,7 +63,7 @@ don <- as.data.frame(don)
       continue<-TRUE
       while(continue){
         jeuNA <- prodna(jeu, pNA)
-        continue<-    continue<- (sum(unlist(sapply(as.data.frame(jeuNA[,-c(1:nbquanti),drop=F]),nlevels)))!=sum(unlist(sapply(jeu,nlevels))))
+        continue<-    continue<- (sum(unlist(sapply(as.data.frame(droplevels(jeuNA[,-c(1:nbquanti),drop=F])),nlevels)))!=sum(unlist(sapply(jeu,nlevels))))
       }
       
       for (nbaxes in ncp.min:ncp.max) {

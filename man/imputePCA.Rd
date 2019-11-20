@@ -3,7 +3,8 @@
 \title{Impute dataset with PCA}
 \description{Impute the missing values of a dataset with the Principal Components Analysis model. Can be used as a preliminary step before performing a PCA on an completed dataset.}
 \usage{imputePCA(X, ncp = 2, scale = TRUE, method = c("Regularized","EM"), 
-       row.w = NULL, coeff.ridge = 1, threshold = 1e-06, seed = NULL, nb.init = 1,  
+       row.w = NULL, ind.sup=NULL,quanti.sup=NULL,quali.sup=NULL,
+	   coeff.ridge = 1, threshold = 1e-06, seed = NULL, nb.init = 1,  
 	   maxiter = 1000, ...)
 }
 
@@ -13,6 +14,9 @@
   \item{scale}{boolean. By default TRUE leading to a same weight for each variable}
   \item{method}{"Regularized" by default or "EM"}
   \item{row.w}{row weights  (by default, a vector of 1 for uniform row weights)}
+  \item{ind.sup}{a vector indicating the indexes of the supplementary individuals}
+  \item{quanti.sup}{a vector indicating the indexes of the quantitative supplementary variables}
+  \item{quali.sup}{a vector indicating the indexes of the categorical supplementary variables}
   \item{coeff.ridge}{1 by default to perform the regularized imputePCA algorithm; useful only if method="Regularized". Other regularization terms can be implemented by setting the value to less than 1 in order to regularized less (to get closer to the results of the EM method) or more than 1 to regularized more (to get closer to the results of the mean imputation)}
   \item{threshold}{the threshold for assessing convergence}
   \item{seed}{integer, by default seed = NULL implies that missing values are initially imputed by the mean of each variable. Other values leads to a random initialization}
@@ -32,7 +36,8 @@ The output of the algorithm can be used as an input of the PCA function of the F
   \item{fittedX}{the reconstructed data}
 }
 
-\references{Josse, J & Husson, F. (2013). Handling missing values in exploratory multivariate data analysis methods. Journal de la SFdS. 153 (2), pp. 79-99.}
+\references{Josse, J & Husson, F. (2013). Handling missing values in exploratory multivariate data analysis methods. Journal de la SFdS. 153 (2), pp. 79-99.\cr
+Josse, J. and Husson, F. missMDA (2016). A Package for Handling Missing Values in Multivariate Data Analysis. Journal of Statistical Software, 70 (1), pp 1-31 <doi:10.18637/jss.v070.i01>}
 
 \author{Francois Husson  \email{husson@agrocampus-ouest.fr} and Julie Josse  \email{julie.josse@polytechnique.edu}
 }
@@ -55,3 +60,4 @@ res.pca <- PCA(res.comp$completeObs)
 }
 \keyword{models}
 \keyword{multivariate}
+\keyword{imputation}
