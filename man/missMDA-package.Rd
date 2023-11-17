@@ -10,26 +10,18 @@ impute missing values in continuous data sets using the PCA model, categorical d
 generate multiple imputed data sets for continuous data using the PCA model and for categorical data using MCA\cr
 visualize multiple imputation in PCA and MCA}
 \details{
-\tabular{ll}{
-Package: \tab missMDA\cr
-Type: \tab Package\cr
-Version: \tab 1.11\cr
-Date: \tab 2017-03-16\cr
-License: \tab GPL \cr
-LazyLoad: \tab yes\cr
-}
-}
+The package missMDA impute incomplete datasets for quantitative and / or categorical variables}
 
 \author{
 Francois Husson, Julie Josse
 
-Maintainer: \email{husson@agrocampus-ouest.fr}
+Maintainer: \email{francois.husson@institut-agro.fr}
 }
 
 \references{
 Josse, J. & Husson, F. (2012). Handling missing values in exploratory multivariate data analysis methods. Journal de la SFdS, 153(2), pp. 79-99.
 
-Julie Josse, Francois Husson (2016). missMDA: A Package for Handling Missing Values in Multivariate Data Analysis. Journal of Statistical Software, 70(1), 1-31. doi:10.18637/jss.v070.i01
+Julie Josse, Francois Husson (2016). missMDA: A Package for Handling Missing Values in Multivariate Data Analysis. Journal of Statistical Software, 70(1), 1-31. \doi{10.18637/jss.v070.i01}
   
 Audigier, V., Husson, F., and Josse, J. (2016). Multiple imputation for continuous variables using a bayesian principal component analysis. Journal of Statistical Computation and Simulation, 86(11):2140-2156.
 
