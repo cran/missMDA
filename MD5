@@ -1,6 +1,6 @@
-28749ab29836a82fcae50ac0542a6447 *DESCRIPTION
-c00999962828724c9356b07cbcb76e83 *NAMESPACE
-9d773a1ecf7e2e8a20cce14b180fe4fb *R/MIFAMD.R
+9131d352664461e65da428f20fd7242e *DESCRIPTION
+ba594fb1ce5d1a31ef27e152f6ebed7c *NAMESPACE
+8d7900be98b7db36786c0ba5fa5ea9bc *R/MIFAMD.R
 0be04a0ab6bdd792223b9b36b3cf9a92 *R/MIMCA.R
 eaf25aa9916ea0b992ca6e23438e945e *R/MIPCA.R
 33844d2d8be639f100561f1e3b3ba432 *R/Overimpute.R
@@ -14,8 +14,9 @@ dd9de9f26aacdc61d535a6a665487cd8 *R/imputeFAMD.R
 3e23a7134fec26c8a41a94802bacfad9 *R/imputeMFA.R
 52e1a478360a9a1276cd73b3a0cd4735 *R/imputeMultilevel.R
 83c07107de70589013feccbf9f31c6be *R/imputePCA.R
-355e8d59732984ed1e9225178b3fec47 *R/plot.MIMCA.R
-e162062ad3ac8b1c12c624716c5d796a *R/plot.MIPCA.R
+cee7ffd5a84ccc3d8ba4b44b253a76ed *R/plot.MIFAMD.R
+5c2e1c923fad785dbf3e69503a62aec7 *R/plot.MIMCA.R
+a965013dc587e5b04aa624a829d8b575 *R/plot.MIPCA.R
 b137fa2f795d50667d6572fcc7830cd8 *R/prelim.R
 e1f346986600d0b9ae2869eedb4ab578 *README.md
 75d0a007992c60d09f764686e9397c0f *build/partial.rdb
@@ -32,7 +33,7 @@ f6a948344ddeec8bc22b3741f9f02c62 *inst/doc/MultipleImputation.Rmd
 cdbcf73a0ebcfccde94afebd204a2a69 *inst/doc/MultipleImputation.html
 382b90b2aad02d5c1584b6e5bd5ddff2 *inst/doc/missMDA.Rmd
 b7887780b92ab9685b9dc13a202a54f0 *inst/doc/missMDA.html
-5dd0daf49cdb7a8cf3e039baf5bdb46d *man/MIFAMD.Rd
+c859e98c115c1dc01e88f18720f2551c *man/MIFAMD.Rd
 b9f42f420c4f25e2fc78e85d131f4b37 *man/MIMCA.Rd
 d90fb0ec64f8242db073292e92ac29af *man/MIPCA.Rd
 37ca3c07d3f0a0d7ab1d9b41f533b301 *man/Overimpute.Rd
@@ -52,7 +53,8 @@ ab76ac66405434061e640946457614d9 *man/imputeMFA.Rd
 faf47d3664535bec34e7e973804be84b *man/missMDA-package.Rd
 e56a2df10913f02c981cb30b84cbfd3a *man/orange.Rd
 a3a42b5e3a80c059eec7e67eae3a2b09 *man/ozone.Rd
-a95eef85aea3a4ef2df06ca5d2e529fd *man/plot.MIMCA.Rd
+509dbc5c91887fa72ad301ebc73143b5 *man/plot.MIFAMD.Rd
+e6cb449a6d7b95ff899183d460525d7c *man/plot.MIMCA.Rd
 c52395e5c585e97f146754ef2ea36b60 *man/plot.MIPCA.Rd
 c69adfc0987e15c27441917e2ee213a7 *man/prelim.Rd
 068e9ff4648b10529b34aeeda5129ca9 *man/snorena.Rd
