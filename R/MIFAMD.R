@@ -39,26 +39,21 @@ MIFAMD <- function(X, ncp = 2, method = c("Regularized","EM"), coeff.ridge = 1,
       if(is.null(D)){D<-rep(1/nrow(zz),nrow(zz))}
       moy<-colMeans(zz)
       zzimp<-sweep(zz,MARGIN = 2,FUN = "-",STATS = moy)
-      res.svd<-svd.triplet(zzimp,col.w = M,row.w = D,ncp=ncp)
-      tmp<-seq(ncol(zz)-ncol(xxquali))
-      if (nrow(zz) > length(tmp)){ 
-        moyeig <- mean(res.svd$vs[tmp[-seq(ncp)]]^2)
-      }else{
-        moyeig <- mean(res.svd$vs[-c(1:ncp)]^2)
-      }
-      moyeig <- min(moyeig * coeff.ridge, res.svd$vs[ncp +1]^2)
+	  svd_res <- FactoMineR::svd.triplet(zzimp,col.w = M,row.w = D,ncp=ncp+1)
+	  svd_res$U <- svd_res$U[,1:ncp]
+	  svd_res$V <- svd_res$V[,1:ncp]
+	  moyeig <- (svd_res$sumvp-sum(svd_res$vs[1:ncp]^2))/min(ncol(zz)-ncol(Xquali)-ncp,(nrow(zz)-1-ncp))
+      moyeig <- min(moyeig * coeff.ridge, svd_res$vs[ncp +1]^2)
       moyeigret<-moyeig
-      if (method == "em"){
-        moyeig <- 0
-      }
+      if (method == "em") moyeig <- 0
       if(ncp>1){
-        eig.shrunk <- (res.svd$vs[1:ncp]^2 - moyeig)/res.svd$vs[1:ncp]
+        eig.shrunk <- (svd_res$vs[1:ncp]^2 - moyeig)/svd_res$vs[1:ncp]
       }else if(ncp==1){
-        eig.shrunk <- matrix((res.svd$vs[1:ncp]^2 - moyeig)/res.svd$vs[1:ncp],1,1)
+        eig.shrunk <- matrix((svd_res$vs[1:ncp]^2 - moyeig)/svd_res$vs[1:ncp],1,1)
       }
-      zzhat<-tcrossprod(res.svd$U%*%diag(eig.shrunk),res.svd$V[which(apply(is.finite(res.svd$V),1,any)),,drop=FALSE])
+      zzhat<-tcrossprod(t(t(svd_res$U)*eig.shrunk),svd_res$V[which(apply(is.finite(svd_res$V),1,any)),,drop=FALSE])
       zzhat<-sweep(zzhat,MARGIN = 2,FUN = "+",STATS = moy)
-      return(list(zzhat=zzhat,moyeig=moyeigret,res.svd=res.svd,M=M))
+      return(list(zzhat=zzhat,moyeig=moyeigret,svd_res=svd_res,M=M))
     }
     
     
@@ -185,17 +180,12 @@ MIFAMD <- function(X, ncp = 2, method = c("Regularized","EM"), coeff.ridge = 1,
   #print 
   temp <- if (coeff.ridge == 1) {
     "regularized"
-  }
-  else if ((coeff.ridge == 0) |(method=="EM")) {
+  } else if (coeff.ridge == 0 || method == "EM") {
     "EM"
-  }else {
-    paste("coeff.ridge=", coeff.ridge)
+  } else {
+    paste0("coeff.ridge=", coeff.ridge)
   }
-  
-  if (verbose) {
-    cat("Multiple Imputation using", temp, "FAMD using", nboot, 
-        "imputed arrays", "\n")
-  }
+  if (verbose) cat("Multiple Imputation using",temp,"FAMD using",nboot,"imputed arrays", "\n")
   
   #multiple imputation
   n <- nrow(don)

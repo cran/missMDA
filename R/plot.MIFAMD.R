@@ -224,7 +224,7 @@ if (orthogonal) {
   } else {
     y <- variables <- NULL ## to avoid no visible binding for global variable
     dta <- cbind.data.frame(x=oo$quanti.sup$coord[,axes[1]],y=oo$quanti.sup$coord[,axes[2]],variables=rep(colnames(res$call$X[,sapply(res$call$X,is.numeric)]),res$call$nboot))
-    PlotVar <- PlotVar + geom_point(data=dta,aes(x=x,y=y,color=variables),alpha=0.5,shape=20,size=2)+guides(color = guide_legend(title=NULL,override.aes = list(alpha=1, size=4)))
+    PlotVar <- PlotVar + geom_point(data=dta,aes(x=x,y=y,color=variables),alpha=0.5,shape=20,size=2)+ggplot2::guides(color = ggplot2::guide_legend(title=NULL,override.aes = list(alpha=1, size=4)))
     print(PlotVar)
     graph$PlotVar <- PlotVar
   }

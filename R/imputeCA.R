@@ -7,13 +7,13 @@ imputeCA <-function (X, ncp = 2, threshold = 1e-08, maxiter = 1000, row.sup=NULL
     Rc <- apply(P, 2, sum)
     Rr <- apply(P, 1, sum)
     S <- t(t((P - Rr %*% t(Rc))/sqrt(Rr))/sqrt(Rc))
-    svdRes <- svd(S)
+    svd_res <- FactoMineR::svd.triplet(S)	
     n <- nrow(X)-length(row.sup)
     p <- ncol(X)-length(col.sup)
-    sigma2 <- sum(svdRes$d[-c(1:ncp)]^2)/((n - 1) * (p - 1) - (n - 1) * ncp - (p - 1) * ncp + ncp^2)
-    lambda.shrinked <- (svdRes$d[1:ncp]^2 - n * (p/min(p, (n - 1))) * sigma2)/svdRes$d[1:ncp]
-    if (ncp == 1) recon <- (svdRes$u[, 1] * lambda.shrinked) %*% t(svdRes$v[, 1])
-    else recon <- svdRes$u[, 1:ncp] %*% (t(svdRes$v[, 1:ncp]) * lambda.shrinked)
+	sigma2 <- (svd_res$sumvp-sum(svd_res$vs[1:ncp]^2))/((n - 1) * (p - 1) - (n - 1) * ncp - (p - 1) * ncp + ncp^2)
+    lambda.shrinked <- (svd_res$vs[1:ncp]^2 - n * (p/min(p, (n - 1))) * sigma2)/svd_res$vs[1:ncp]
+    if (ncp == 1) recon <- (svd_res$U[, 1] * lambda.shrinked) %*% t(svd_res$V[, 1])
+    else recon <- svd_res$U[, 1:ncp] %*% (t(svd_res$V[, 1:ncp]) * lambda.shrinked)
     recon <- sum(X) * (t(t(recon * sqrt(Rr)) * sqrt(Rc)) + Rr %*% t(Rc))
 	recon[row.sup,] <- recon[row.sup,]*1e+08
 	recon[,col.sup] <- recon[,col.sup]*1e+08

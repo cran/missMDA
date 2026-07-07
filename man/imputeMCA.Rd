@@ -67,7 +67,7 @@ require(FactoMineR)
 res.mca <- MCA(vnf,tab.disj=res.impute$tab.disj) 
 
 ## With supplementary variables (var 11 to 14), impute the active ones
-res.impute <- imputeMCA(vnf[,1:10], ncp=4)
+res.impute <- imputeMCA(vnf, ncp=4,quali.sup=11:14)
 res.mca <- MCA(vnf,tab.disj=res.impute$tab.disj,quali.sup=11:14) 
 }
 }
