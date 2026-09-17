@@ -209,6 +209,11 @@ names(resMI) <- names(tab.disj) <- paste0("nboot.",1:nboot)
   res <- list(res.MI = resMI,
               res.imputeFAMD = imputeFAMD(X,ncp=ncp, coeff.ridge=coeff.ridge, method=method, threshold=threshold, maxiter=maxiter,seed=seed),
               call=list(X=X,nboot=nboot, ncp=ncp, coeff.ridge=coeff.ridge, threshold=threshold, seed=seed, maxiter=maxiter,tab.disj=tab.disj))
+cols_X <- colnames(X)
+cols_disj <- colnames(res$res.imputeFAMD$tab.disj)
+res$res.MI <- lapply(res$res.MI, function(df) { df[, cols_X, drop = FALSE]} )
+res$call$tab.disj <- lapply(res$call$tab.disj, function(df) {df[, cols_disj, drop = FALSE]} )
+
   class(res) <- c("MIFAMD", "list")
   if (verbose) {
     cat("\ndone!\n")

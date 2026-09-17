@@ -1,6 +1,6 @@
-7587101faab3a7420122d47817ca166a *DESCRIPTION
-de1d80d8803eca765935b734a45c4fdf *NAMESPACE
-111ad364b8affa9f4262461629971c59 *R/MIFAMD.R
+de86cdba372c8823160efe3bf086fea0 *DESCRIPTION
+2db4a8a9469ff7f6dedd41e68dbd2980 *NAMESPACE
+46bf258e6c05e77869977ad67e4bccce *R/MIFAMD.R
 0be04a0ab6bdd792223b9b36b3cf9a92 *R/MIMCA.R
 eaf25aa9916ea0b992ca6e23438e945e *R/MIPCA.R
 33844d2d8be639f100561f1e3b3ba432 *R/Overimpute.R
@@ -19,8 +19,8 @@ cfce7d789f59e23afcd59762cf7421c4 *R/plot.MIFAMD.R
 d10558c3937a6f035b691d4a8bfab151 *R/plot.MIPCA.R
 b137fa2f795d50667d6572fcc7830cd8 *R/prelim.R
 e1f346986600d0b9ae2869eedb4ab578 *README.md
-d54042561b90aafd8a9a202ea63e1e4b *build/partial.rdb
-4eed0775c260865f0c2076350a795048 *build/vignette.rds
+6af8e7644a2c366a25339b1923c9a048 *build/partial.rdb
+84c0d88341af2677dd1c3fde9449f974 *build/vignette.rds
 a2f12f01d06831e9ac9acf3d8065c12a *data/TitanicNA.rda
 9110be4ba520ce404539ffc45a363a81 *data/gene.rda
 0eb6caf974e4788432435e19a5765543 *data/geno.rda
@@ -30,9 +30,9 @@ a2f12f01d06831e9ac9acf3d8065c12a *data/TitanicNA.rda
 90149d2652753b0e773292cf281d2855 *data/vnf.rda
 574005d74de8a473539a79e9e092aa96 *inst/CITATION
 f6a948344ddeec8bc22b3741f9f02c62 *inst/doc/MultipleImputation.Rmd
-ba94910e44d12f0c915368e72602325f *inst/doc/MultipleImputation.html
+c0ec2a8e9249f9671f0a5d80465c64a7 *inst/doc/MultipleImputation.html
 382b90b2aad02d5c1584b6e5bd5ddff2 *inst/doc/missMDA.Rmd
-9bb14b21bf0be7c7935048307915bdc5 *inst/doc/missMDA.html
+5e30ff439169f67d21f1aa7dcf75d928 *inst/doc/missMDA.html
 c859e98c115c1dc01e88f18720f2551c *man/MIFAMD.Rd
 b9f42f420c4f25e2fc78e85d131f4b37 *man/MIMCA.Rd
 d90fb0ec64f8242db073292e92ac29af *man/MIPCA.Rd

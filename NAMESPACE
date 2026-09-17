@@ -13,3 +13,4 @@ importFrom(utils,txtProgressBar,setTxtProgressBar)
 
 S3method(plot, MIPCA)
 S3method(plot, MIMCA)
+S3method(plot, MIFAMD)
